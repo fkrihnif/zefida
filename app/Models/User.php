@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
         'password',
+        'role',
+        'agent_id'
     ];
 
     /**
@@ -41,4 +43,13 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function reseller()
+    {
+        return $this->hasMany(Reseller::class);
+    }
+    public function sale()
+    {
+        return $this->hasMany(Sale::class);
+    }
 }
