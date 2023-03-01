@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\MemberController;
+use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 
 /*
@@ -46,8 +47,16 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
     Route::prefix('member')->name('member.')->group(function () {
         Route::get('', [MemberController::class, 'index'])->name('index');
         Route::post('store', [MemberController::class, 'store'])->name('store');
+        Route::get('show/{id}', [MemberController::class, 'show'])->name('show');
         Route::put('update', [MemberController::class, 'update'])->name('update');
+        Route::put('updateReseller', [MemberController::class, 'updateReseller'])->name('updateReseller');
         Route::delete('delete', [MemberController::class, 'delete'])->name('delete');
+    });
+    Route::prefix('sale')->name('sale.')->group(function () {
+        Route::get('', [SaleController::class, 'index'])->name('index');
+        Route::post('store', [SaleController::class, 'store'])->name('store');
+        Route::put('update', [SaleController::class, 'update'])->name('update');
+        Route::delete('delete', [SaleController::class, 'delete'])->name('delete');
     });
 
 

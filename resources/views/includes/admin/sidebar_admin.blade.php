@@ -20,14 +20,16 @@
             <i class="fas fa-fw fa-box"></i>
             <span>Produk</span></a>
     </li>
-    <li class="nav-item {{ request()->is('admin/member') ?'active' : '' }}">
+    <li class="nav-item {{ request()->is('admin/member') || request()->is('admin/member/show/*')  ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.member.index') }}">
             <i class="fas fa-fw fa-user"></i>
             <span>Member</span></a>
     </li>
-
-
-
+    <li class="nav-item {{ request()->is('admin/sale') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.sale.index') }}">
+            <i class="fas fa-fw fa-cart-arrow-down"></i>
+            <span>Penjualan</span></a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
