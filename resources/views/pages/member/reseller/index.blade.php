@@ -90,7 +90,7 @@
     position: absolute;
     top: 15px;
     right: 35px;
-    color: #f1f1f1;
+    color: white;
     font-size: 40px;
     font-weight: bold;
     transition: 0.1s;
@@ -98,7 +98,7 @@
 
     .close:hover,
     .close:focus {
-    color: #bbb;
+    color: white;
     text-decoration: none;
     cursor: pointer;
     }
@@ -117,26 +117,67 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Data Semua Penjualan</h1>
+        <h1 class="h3 mb-0 text-gray-800">Detail Member</h1>
     </div>
 
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4 mt-2">
         <div class="card-body">
+           <div class="row">
+            <div class="col-4"><b>Id_Agen</b></div>
+            <div class="col-6">: {{ $member->agent_id }}</div>
+           </div>
+           <div class="row">
+            <div class="col-4"><b>Username</b></div>
+            <div class="col-8">: {{ $member->username }}</div>
+           </div>
+           <div class="row">
+            <div class="col-4"><b>Nama</b></div>
+            <div class="col-8">: {{ $member->name }}</div>
+           </div>
+           <div class="row">
+            <div class="col-4"><b>Total Point</b></div>
+            <div class="col-8">: {{ $member->total_point }}</div>
+           </div>
+           <hr>
+           <div class="row">
+                <div class="col-12">
+                    <div class="d-sm-flex align-items-center justify-content-between mb-2">
+                        <h1 class="h3 mb-0 text-gray-800">Tim Reseller</h1>
+                    </div>
+                </div>
+
+                <div class="col-12 ml-2">
+                    <div class="row">
+                        @foreach ($member->reseller as $reseller)
+                        <div class="col-6">
+                            - {{ $reseller->name }} - ({{$reseller->point}}) &nbsp; <a href="#" data-id="{{ $reseller->id }}" data-name="{{ $reseller->name }}" data-point="{{ $reseller->point }}" data-toggle="modal" data-target="#editReseller"><i class="fas fa-edit" style="font-size: 75%"></i></a>
+                        </div>    
+                        @endforeach
+                    </div>    
+                </div>
+           </div>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Detail Penjualan Reseller</h1>
+                </a>
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Id_Agen</th>
-                            <th>Reseller</th>
+                            <th>Nama Reseller</th>
                             <th>Produk</th>
                             <th>Quantity</th>
                             <th>Point</th>
                             <th>Tanggal</th>
-                            <th>Action</th>
                         </tr>
                     </thead>
-
+    
                     <tbody>
                         <?php
                         $i = 1;
@@ -144,19 +185,16 @@
                         @foreach ($sales as $sale)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $sale->user->agent_id }}</td>
                             <td>{{ $sale->reseller->name }}</td>
                             <td> 
-                            <div class="item">
-                                <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($sale->product->image) }}">
-                             </div> <br>
-                             {{ $sale->product->name }}
-                            </td>
+                                <div class="item">
+                                    <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($sale->product->image) }}">
+                                 </div> <br>
+                                 {{ $sale->product->name }}
+                                </td>
                             <td>{{ $sale->quantity }}</td>
                             <td>{{ $sale->point_earn }}</td>
                             <td>{{ date('d-m-Y', strtotime($sale->sale_date)) }}</td>
-                            <td><a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $sale->id }}"><i class="fas fa-trash"></i></a>
-                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -169,78 +207,51 @@
 
 <!-- /.container-fluid -->
 {{-- modal --}}
+
 <!-- The Modal -->
 <div id="myModal" class="modal-image">
     <span class="close">&times;</span>
     <img id="modal-img" class="modal-content-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQS2ol73JZj6-IqypxPZXYS3rRiPwKteoD8vezk9QsRdkjt3jEn&usqp=CAU">
-      
-    
     <div id="caption"></div>
-</div>
-
-<div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <form action="{{ route('admin.sale.delete') }}" method="POST">
-                @csrf
-                @method('delete')
-                <input type="hidden" name="id">
-                <div class="modal-header">
-                    <h5 class="modal-title"><span>Hapus</span> Data Penjualan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus penjualan ini ? <b><i>point reseller akan dipulihkan</i></b>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Hapus</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 @endsection
 @push('addon-script')
-<script>
+    <script>
+         // Get the modal
+        var modal = document.getElementById("myModal");
 
-    $('#delete').on('show.bs.modal', (e) => {
-        var id = $(e.relatedTarget).data('id');
-        $('#delete').find('input[name="id"]').val(id);
-    });
-    // Get the modal
-    var modal = document.getElementById("myModal");
-
-    // Get the image and insert it inside the modal - use its "alt" text as a caption
-    // var img = document.getElementById("myImg");
-    var modalImg = document.getElementById("modal-img");
-    var captionText = document.getElementById("caption");
-    // img.onclick = function(){
-    //   modal.style.display = "block";
-    //   modalImg.src = this.src;
-    //   captionText.innerHTML = this.alt;
-    // }
+        // Get the image and insert it inside the modal - use its "alt" text as a caption
+        // var img = document.getElementById("myImg");
+        var modalImg = document.getElementById("modal-img");
+        var captionText = document.getElementById("caption");
+        // img.onclick = function(){
+        //   modal.style.display = "block";
+        //   modalImg.src = this.src;
+        //   captionText.innerHTML = this.alt;
+        // }
 
 
-    document.addEventListener("click", (e) => {
-    const elem = e.target;
-    if (elem.id==="myImg") {
-        modal.style.display = "block";
-        modalImg.src = elem.dataset.biggerSrc || elem.src;
-        captionText.innerHTML = elem.alt; 
-    }
-    })
+        document.addEventListener("click", (e) => {
+        const elem = e.target;
+        if (elem.id==="myImg") {
+            modal.style.display = "block";
+            modalImg.src = elem.dataset.biggerSrc || elem.src;
+            captionText.innerHTML = elem.alt; 
+        }
+        })
 
-    // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
 
-    // When the user clicks on <span> (x), close the modal
-    span.onclick = function() { 
-    modal.style.display = "none";
-    }
-</script>
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function() { 
+        modal.style.display = "none";
+        }
+
+    </script>
+
+
+
 
 @endpush

@@ -118,7 +118,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Produk</h1>
-        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
+        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Produk</i></a>
         </a>
     </div>
 
@@ -129,8 +129,8 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama</th>
-                            <th>Gambar</th>
+                            <th style="width: 40%">Nama</th>
+                            <th style="width: 30%">Gambar</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -145,13 +145,13 @@
                             <td>{{ $product->name }}</td>
                             <td>
                                 <div class="item">
-                                    <img style="height:150px"  id="myImg" class="img-fluid" src="{{ Storage::url($product->image) }}">
+                                    <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($product->image) }}">
                                  </div>
                                 <a href="{{ Storage::url($product->image) }}" target="_link"><i style="font-size: 80%; color:grey">Detail</i></a>
                             </td>
                             <td>
                                 <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
-                                <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
+                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach

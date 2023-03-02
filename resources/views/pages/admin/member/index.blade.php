@@ -7,7 +7,7 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Member</h1>
-        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah</i></a>
+        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Member</i></a>
         </a>
     </div>
 
@@ -39,7 +39,6 @@
                             <b style="font-size: 85%">Total Point:</b> {{ $member->total_point }}
                             </td>
                             <td>
-                                @if (!$member->reseller->isEmpty())
                                     @php
                                         $count = 0;
                                     @endphp
@@ -51,13 +50,11 @@
                                     @if (count($member->reseller) > 3)
                                         <i style="font-size: 90%">....</i>
                                     @endif
-                                @else
-                                    <i style="font-size:90%; color: grey">--Belum Ada Tim--</i>
-                                @endif
+                             
                             </td>
                             <td>
                                 <a href="{{ route('admin.member.show', $member->id) }}"><i class="fa fa-eye"></i></a>
-                                <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-trash"></i></a>
+                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-trash"></i></a> | <a href="#" style="color: orange" data-target="#reset" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-cog" style="font-size: 80%">Reset Password</i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -71,6 +68,30 @@
 
 <!-- /.container-fluid -->
 {{-- modal --}}
+<div class="modal fade" id="reset" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="{{ route('admin.member.resetPassword') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span>Reset</span> Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Apakah Anda yakin ingin mereset password Akun ini ? Password akan direset menjadi : password123
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-warning">Reset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -188,6 +209,10 @@
 @endsection
 @push('addon-script')
 <script>
+    $('#reset').on('show.bs.modal', (e) => {
+        var id = $(e.relatedTarget).data('id');
+        $('#reset').find('input[name="id"]').val(id);
+    });
     $("#edit").on('show.bs.modal', (e) => {
         var id = $(e.relatedTarget).data('id');
         var name = $(e.relatedTarget).data('name');
@@ -197,7 +222,6 @@
     
     $('#delete').on('show.bs.modal', (e) => {
         var id = $(e.relatedTarget).data('id');
-        console.log(id);
         $('#delete').find('input[name="id"]').val(id);
     });
 

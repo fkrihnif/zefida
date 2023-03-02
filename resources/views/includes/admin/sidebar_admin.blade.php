@@ -28,9 +28,13 @@
     <li class="nav-item {{ request()->is('admin/sale') ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.sale.index') }}">
             <i class="fas fa-fw fa-cart-arrow-down"></i>
-            <span>Penjualan</span></a>
+            <span>Data Penjualan</span></a>
     </li>
-
+    <li class="nav-item {{ request()->is('admin/profile/changePassword') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.profile.changePassword') }}">
+            <i class="fas fa-fw fa-cogs""></i>
+            <span>Ganti Password</span></a>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

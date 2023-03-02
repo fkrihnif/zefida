@@ -10,10 +10,15 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item {{ request()->is('admin') ?'active' : '' }}">
-        <a class="nav-link" href="">
+    <li class="nav-item {{ request()->is('member/dashboard') || request()->is('home') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('member.dashboard.index') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
+    </li>
+    <li class="nav-item {{ request()->is('member/reseller') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('member.reseller.index') }}">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Member</span></a>
     </li>
 
 

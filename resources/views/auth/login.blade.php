@@ -48,7 +48,6 @@
                 <hr>
         
                 <div class="text-center">
-                  <a class="small" href="/register">Buat Akun | </a>
                   <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal">
                     Lupa Password?
                   </button>
