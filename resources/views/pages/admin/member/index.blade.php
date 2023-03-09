@@ -53,7 +53,7 @@
                              
                             </td>
                             <td>
-                                <a href="{{ route('admin.member.show', $member->id) }}"><i class="fa fa-eye"></i></a>
+                                <a href="{{ route('admin.member.detail', $member->id) }}"><i class="fa fa-eye"></i></a>
                                 | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-trash"></i></a> | <a href="#" style="color: orange" data-target="#reset" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-cog" style="font-size: 80%">Reset Password</i></a>
                             </td>
                         </tr>
@@ -181,11 +181,22 @@
                     <hr>
 
                     <div class="row input_fields_wrap">
-                        <div class="col-6">
+                        <div class="col-5">
                             <div class="form-group ml-3">
-                                <label for="name_reseller">Tim Reseller</label>
+                                <label for="name_reseller">Nama Reseller</label>
                                 <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
                                 @error('name_reseller')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="reseller_id">ID Reseller</label>
+                                <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
+                                @error('reseller_id')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
@@ -238,15 +249,26 @@
                 $(wrapper).append(`
                     <div class="container">
                         <div class="row input_fields_wrap">
-                            <div class="col-6">
+                            <div class="col-5">
                                 <div class="form-group">
-                                <label for="name_reseller">Tim Reseller</label>
+                                <label for="name_reseller">Nama Reseller</label>
                                 <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
                                 @error('name_reseller')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
                                 @enderror
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="reseller_id">ID Reseller</label>
+                                    <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
+                                    @error('reseller_id')
+                                    <div class="invalid-feedback">
+                                        {{$message}}
+                                    </div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-3">

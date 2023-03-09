@@ -18,10 +18,14 @@ class ProductController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required',
+            'description' => 'required',
+            'price' => 'required',
             'image' => 'mimes:JPG,jpeg,png,jpg,SVG,svg|max:1024',
         ]);
         $product = new Product();
         $product->name = $request->get('name');
+        $product->description = $request->get('description');
+        $product->price = $request->get('price');
         if ($request->file('image')) {
             $file = $request->file('image')->store('produk', 'public');
             $product->image = $file;
@@ -39,6 +43,8 @@ class ProductController extends Controller
         $product = Product::find($request->id);
 
         $product->name = $request->get('name');
+        $product->description = $request->get('description');
+        $product->price = $request->get('price');
         if ($request->file('image')) {
             if ($product->image && file_exists(storage_path('app/public/' . $product->image))) {
                 \Storage::delete('public/' . $product->image);

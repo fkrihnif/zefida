@@ -2,7 +2,10 @@
 <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard.index') }}">
+        <div class="sidebar-brand-icon">
+            {{-- <i class="fas fa-laugh-wink"></i> --}}
+        </div>
         <div class="sidebar-brand-text mx-3">Zefida</div>
     </a>
 
@@ -23,7 +26,7 @@
     <li class="nav-item {{ request()->is('admin/member') || request()->is('admin/member/show/*')  ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.member.index') }}">
             <i class="fas fa-fw fa-user"></i>
-            <span>Member</span></a>
+            <span>Tim</span></a>
     </li>
     <li class="nav-item {{ request()->is('admin/sale') ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.sale.index') }}">

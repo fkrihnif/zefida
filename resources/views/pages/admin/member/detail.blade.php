@@ -117,7 +117,9 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Detail Member</h1>
+        <h1 class="h3 mb-0 text-gray-800">Detail Tim</h1>
+        <a href="#" data-toggle="modal" data-target="#tambahReseller"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Reseller</i></a>
+    </a>
     </div>
     <a href="{{ route('admin.member.index') }}"><i class="fas fa-arrow-left" style="font-size: 85%"> Kembali</i></a>
 
@@ -125,7 +127,7 @@
     <div class="card shadow mb-4 mt-2">
         <div class="card-body">
            <div class="row">
-            <div class="col-4"><b>Id_Agen</b></div>
+            <div class="col-4"><b>Id No</b></div>
             <div class="col-6">: {{ $member->agent_id }}</div>
             <div class="col-2"><a href="#" data-id="{{ $member->id }}" data-agent="{{ $member->agent_id }}" data-username="{{ $member->username }}" data-name="{{ $member->name }}" data-totalp="{{ $member->total_point }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit">Edit</i></a></div>
            </div>
@@ -137,37 +139,82 @@
             <div class="col-4"><b>Nama</b></div>
             <div class="col-8">: {{ $member->name }}</div>
            </div>
-           <div class="row">
-            <div class="col-4"><b>Total Point</b></div>
-            <div class="col-8">: {{ $member->total_point }}</div>
-           </div>
            <hr>
-           <div class="row">
-                <div class="col-12">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-2">
-                        <h1 class="h3 mb-0 text-gray-800">Tim Reseller</h1>
-                        <a href="#" data-toggle="modal" data-target="#tambahReseller"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Reseller</i></a>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="col-12 ml-2">
-                    <div class="row">
-                        @foreach ($member->reseller as $reseller)
-                        <div class="col-6">
-                            - {{ $reseller->name }} - ({{$reseller->point}}) &nbsp; <a href="#" data-id="{{ $reseller->id }}" data-name="{{ $reseller->name }}" data-point="{{ $reseller->point }}" data-toggle="modal" data-target="#editReseller"><i class="fas fa-edit" style="font-size: 75%"></i></a>
-                        </div>    
-                        @endforeach
-                    </div>    
-                </div>
-           </div>
+           <div class="row justify-content-end">
+            <div class="col-3" style="border: 1px solid black;">
+              Total Penjualan Pribadi (th 2023)
+            </div>
+            <div class="col-3" style="border: 1px solid black;">
+                 @foreach ($total_penjualan_pribadi_tahun as $tpp)
+                 {{ $tpp->sale->sum('quantity') }}
+                 @endforeach
+            </div>
+          </div>
+          <div class="row justify-content-end">
+            <div class="col-3" style="border: 1px solid black;">
+              Total Penjualan Tim (th 2023)
+            </div>
+            <div class="col-3" style="border: 1px solid black;">
+                @php
+                $tp_tim = [];
+                @endphp
+                @foreach ($total_penjualan_tim_tahun as $tpt)
+                @php
+                $tp_tim[] = $tpt->sale->sum('quantity') ;
+                @endphp
+                @endforeach
+                @php
+                $totalPurchase = array_sum($tp_tim);
+                @endphp
+                {{ $totalPurchase }}
+            </div>
+          </div>
+          <br>
+          <div class="row justify-content-end">
+            <div class="col-3" style="border: 1px solid black;">
+              Total Penjualan Tim bulan ini
+            </div>
+            <div class="col-3" style="border: 1px solid black;">
+                @php
+                $tp_tim_bulan = [];
+                @endphp
+                @foreach ($total_penjualan_tim_bulan as $tpt_bulan)
+                @php
+                $tp_tim_bulan[] = $tpt_bulan->sale->sum('quantity') ;
+                @endphp
+                @endforeach
+                @php
+                $totalPurchaseBulan = array_sum($tp_tim_bulan);
+                @endphp
+                {{ $totalPurchaseBulan }}
+            </div>
+          </div>
+          <div class="row justify-content-end">
+            <div class="col-3" style="border: 1px solid black;">
+              Bonus Bulan Ini
+            </div>
+            <div class="col-3" style="border: 1px solid black;">
+                @php
+                $c = [];
+                @endphp
+                @foreach ($bonus_bulan as $bb)
+                @php
+                $c[] = $bb->sale->sum('bonus_earn') ;
+                @endphp
+                @endforeach
+                @php
+                $totalC = array_sum($c);
+                @endphp
+                {{ $totalC }}
+            </div>
+          </div>
         </div>
     </div>
 
     <div class="card shadow">
         <div class="card-body">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Detail Penjualan Reseller</h1>
+                <h1 class="h3 mb-0 text-gray-800">Data Penjualan Reseller</h1>
                 <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Penjualan</i></a>
                 </a>
             </div>
@@ -176,11 +223,9 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama Reseller</th>
-                            <th>Produk</th>
-                            <th>Quantity</th>
-                            <th>Point</th>
-                            <th>Tanggal</th>
+                            <th>ID No</th>
+                            <th>Agen/Reseller</th>
+                            <th>Total Penjualan Bulan Ini</th>
                         </tr>
                     </thead>
     
@@ -188,19 +233,14 @@
                         <?php
                         $i = 1;
                         ?>
-                        @foreach ($sales as $sale)
+                        @foreach ($resellers as $reseller)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $sale->reseller->name }}</td>
-                            <td> 
-                                <div class="item">
-                                    <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($sale->product->image) }}">
-                                 </div> <br>
-                                 {{ $sale->product->name }}
-                                </td>
-                            <td>{{ $sale->quantity }}</td>
-                            <td>{{ $sale->point_earn }}</td>
-                            <td>{{ date('d-m-Y', strtotime($sale->sale_date)) }}</td>
+                            <td>{{ $reseller->reseller_id }} </td>
+                            <td>{{ $reseller->name }}</td>
+                            <td>
+                                {{ $reseller->sale->sum('quantity') }} <a href="{{ route('admin.member.detailReseller', ['agent'=>$member->id,'reseller'=>$reseller->id]) }}"><i class="fas fa-eye"></i></a>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -392,6 +432,17 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
+                                <label for="bonus_earn">Bonus yg didapat</label>
+                                <input type="number" class="form-control @error('bonus_earn') is-invalid @enderror" id="bonus_earn" name="bonus_earn" value="{{ old('bonus_earn') }}" required autocomplete="off">
+                                @error('bonus_earn')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
                                 <label for="sale_date">Tanggal Penjualan</label>
                                 <input type="date" class="form-control @error('sale_date') is-invalid @enderror" id="sale_date" name="sale_date" value="{{ old('sale_date') }}" required autocomplete="off">
                                 @error('sale_date')
@@ -428,11 +479,22 @@
                 </div>
                 <div class="modal-body">
                     <div class="row input_fields_wrap">
-                        <div class="col-6">
-                            <div class="form-group ml-3">
-                                <label for="name_reseller">Tim Reseller</label>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label for="name_reseller">Nama Reseller</label>
                                 <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
                                 @error('name_reseller')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="reseller_id">ID Reseller</label>
+                                <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
+                                @error('reseller_id')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
@@ -523,7 +585,7 @@
                 $(wrapper).append(`
                     <div class="container">
                         <div class="row input_fields_wrap">
-                            <div class="col-6">
+                            <div class="col-5">
                                 <div class="form-group">
                                 <label for="name_reseller">Tim Reseller</label>
                                 <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
@@ -532,6 +594,17 @@
                                     {{$message}}
                                 </div>
                                 @enderror
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label for="reseller_id">ID Reseller</label>
+                                    <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
+                                    @error('reseller_id')
+                                    <div class="invalid-feedback">
+                                        {{$message}}
+                                    </div>
+                                    @enderror
                                 </div>
                             </div>
                             <div class="col-3">

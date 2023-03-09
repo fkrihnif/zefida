@@ -9,18 +9,20 @@
         <div class="card-body p-0">
           <!-- Nested Row within Card Body -->
           <div class="row">
-            <div class="col-lg-6 d-none d-lg-block">
-              <img src="template/img/logo.jpeg" alt="" style="height: 400px">
+            <div class="col-lg-6 text-center">
+              <br><br><br>
+              <img src="{{ url('template/img/logoz.jpg') }}" alt="" style="height: 200px;">
+              <p>Semua Untung, Semua Sukses</p>
             </div>
             <div class="col-lg-6">
               <div class="p-5">
                 <div class="text-center">
-                  <h1 class="h4 text-gray-900 mb-4">Selamat Datang!</h1>
+                  <h1 class="h4 text-gray-900 mb-4">Selamat Datang Tim Agen/Reseller!</h1>
                 </div>
                 <form method="POST" action="{{ route('login') }}">
                   @csrf
                   <div class="form-group">
-                    <input id="email" type="username" class="form-control form-control-user @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Username">
+                    <input id="username" type="username" class="form-control form-control-user @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus placeholder="Username">
 
                     @error('username')
                         <span class="invalid-feedback" role="alert">

@@ -150,7 +150,7 @@
                     <div class="row">
                         @foreach ($member->reseller as $reseller)
                         <div class="col-6">
-                            - {{ $reseller->name }} - ({{$reseller->point}}) &nbsp; <a href="#" data-id="{{ $reseller->id }}" data-name="{{ $reseller->name }}" data-point="{{ $reseller->point }}" data-toggle="modal" data-target="#editReseller"><i class="fas fa-edit" style="font-size: 75%"></i></a>
+                            - {{ $reseller->name }} - ({{$reseller->point}})
                         </div>    
                         @endforeach
                     </div>    

@@ -129,8 +129,10 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th style="width: 40%">Nama</th>
-                            <th style="width: 30%">Gambar</th>
+                            <th>Nama</th>
+                            <th>Gambar</th>
+                            <th>Harga</th>
+                            <th>Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -147,10 +149,11 @@
                                 <div class="item">
                                     <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($product->image) }}">
                                  </div>
-                                <a href="{{ Storage::url($product->image) }}" target="_link"><i style="font-size: 80%; color:grey">Detail</i></a>
                             </td>
+                            <td>{{ $product->price }}</td>
+                            <td>{{ $product->description }}</td>
                             <td>
-                                <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
+                                <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-description="{{ $product->description }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
                                 | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -192,6 +195,24 @@
                         <label for="name">Nama</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
                         @error('name')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="price">Harga</label>
+                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
+                        @error('price')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Deskripsi Produk</label>
+                        <textarea class="form-control" name="description" id="description" cols="30" rows="10" required></textarea>
+                        @error('description')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -265,6 +286,24 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="price">Harga</label>
+                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
+                        @error('price')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Deskripsi Produk</label>
+                        <textarea class="form-control" name="description" id="description" cols="30" rows="10" required></textarea>
+                        @error('description')
+                        <div class="invalid-feedback">
+                            {{$message}}
+                        </div>
+                        @enderror
+                    </div>
+                    <div class="form-group">
                         <label for="image">Gambar</label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" required>
                         @error('image')
@@ -289,8 +328,12 @@
     $("#edit").on('show.bs.modal', (e) => {
         var id = $(e.relatedTarget).data('id');
         var name = $(e.relatedTarget).data('name');
+        var price = $(e.relatedTarget).data('price');
+        var description = $(e.relatedTarget).data('description');
         $('#edit').find('input[name="id"]').val(id);
         $('#edit').find('input[name="name"]').val(name);
+        $('#edit').find('input[name="price"]').val(price);
+        $('#edit').find('textarea[name="description"]').val(description);
     });
     
     $('#delete').on('show.bs.modal', (e) => {

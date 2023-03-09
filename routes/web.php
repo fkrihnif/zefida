@@ -50,7 +50,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
     Route::prefix('member')->name('member.')->group(function () {
         Route::get('', [MemberController::class, 'index'])->name('index');
         Route::post('store', [MemberController::class, 'store'])->name('store');
-        Route::get('show/{id}', [MemberController::class, 'show'])->name('show');
+        Route::get('detail/{id}', [MemberController::class, 'detail'])->name('detail');
+        Route::get('detail/{agent}/detailReseller/{reseller}', [MemberController::class, 'detailReseller'])->name('detailReseller');
         Route::put('update', [MemberController::class, 'update'])->name('update');
         Route::put('updateReseller', [MemberController::class, 'updateReseller'])->name('updateReseller');
         Route::post('addReseller', [MemberController::class, 'addReseller'])->name('addReseller');
