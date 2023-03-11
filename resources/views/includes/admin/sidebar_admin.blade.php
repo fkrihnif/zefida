@@ -23,7 +23,7 @@
             <i class="fas fa-fw fa-box"></i>
             <span>Produk</span></a>
     </li>
-    <li class="nav-item {{ request()->is('admin/member') || request()->is('admin/member/show/*')  ?'active' : '' }}">
+    <li class="nav-item {{ request()->is('admin/member') || request()->is('admin/member/detail/*') || request()->is('admin/member/detail/*/detailReseller/*')  ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.member.index') }}">
             <i class="fas fa-fw fa-user"></i>
             <span>Tim</span></a>

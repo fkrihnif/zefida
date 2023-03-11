@@ -46,6 +46,7 @@ class MemberController extends Controller
             $reseller_main->name = $request->get('name').$string;
             $reseller_main->reseller_id = $request->get('agent_id');
             $reseller_main->point = '0';
+            $reseller_main->bonus = '0';
             $reseller_main->position = 'Agen';
             $reseller_main->save();
 
@@ -57,7 +58,8 @@ class MemberController extends Controller
                         'name' => $request->name_reseller[$i],
                         'reseller_id' => $request->reseller_id[$i],
                         'point' => '0',
-                        'position' => 'Reseller'
+                        'position' => 'Reseller',
+                        'bonus' => '0'
                     ]);
                 }
             } 
@@ -71,106 +73,95 @@ class MemberController extends Controller
         }
     }
 
-    public function detail ($id){
+    public function detail (Request $request, $id){
         $member = User::find($id);
         $products = Product::orderBy('id', 'DESC')->get();
         $sales = Sale::where('user_id', $id)->orderBy('id', 'DESC')->get();
 
         $total_penjualan_pribadi_tahun = Reseller::where('user_id', $id)->where('position', 'Agen')->with('sale', function ($query) {
-            $query->whereYear('sale_date', '2023');
+            $current_year = Carbon::now()->year;
+            $query->whereYear('sale_date', $current_year);
             })->get();
         
         $total_penjualan_tim_tahun = Reseller::where('user_id', $id)->with('sale', function ($query) {
-            $query->whereYear('sale_date', '2023');
+            $current_year = Carbon::now()->year;
+            $query->whereYear('sale_date', $current_year);
             })->get();
         
         $total_penjualan_tim_bulan = Reseller::where('user_id', $id)->with('sale', function ($query) {
-            $query->whereMonth('sale_date', '3');
+            $current_month = Carbon::now()->month;
+            $query->whereMonth('sale_date', $current_month);
             })->get();
 
         $bonus_bulan = Reseller::where('user_id', $id)->with('sale', function ($query) {
-            $query->whereMonth('sale_date', '3');
+            $current_month = Carbon::now()->month;
+            $query->whereMonth('sale_date', $current_month);
             })->get();
 
-        $resellers = Reseller::where('user_id', $id)->with('sale', function ($query) {
-            $query->whereMonth('sale_date', '3');
-            })->get();
+        $request_month = $request->get('search_month');
+
+        if ($request_month) {
+            $resellers = Reseller::where('user_id', $id)->with('sale', function ($query) use ($request_month) {
+                $get_month = substr($request_month, 5);
+                $query->whereMonth('sale_date', $get_month);
+                })->get();
+        } else {
+            $resellers = Reseller::where('user_id', $id)->with('sale', function ($query) {
+                $current_month = Carbon::now()->month;
+                $query->whereMonth('sale_date', $current_month);
+                })->get();
+        }
 
         return view('pages.admin.member.detail', compact('member', 'products', 'sales', 'resellers', 'total_penjualan_pribadi_tahun', 'total_penjualan_tim_tahun', 'total_penjualan_tim_bulan', 'bonus_bulan'));
     }
 
-    public function detailReseller ($agent, $reseller){
+    public function detailReseller (Request $request, $agent, $reseller){
         $member = User::find($agent);
 
         $reseller = Reseller::find($reseller);
 
         $total_penjualan_pribadi_tahun = Reseller::where('user_id', $agent)->where('position', 'Agen')->with('sale', function ($query) {
-            $query->whereYear('sale_date', '2023');
+            $current_year = Carbon::now()->year;
+            $query->whereYear('sale_date', $current_year);
             })->get();
         
         $total_penjualan_tim_tahun = Reseller::where('user_id', $agent)->with('sale', function ($query) {
-            $query->whereYear('sale_date', '2023');
+            $current_year = Carbon::now()->year;
+            $query->whereYear('sale_date', $current_year);
             })->get();
         
-        $total_penjualan_reseller_bulan = Reseller::where('user_id', $reseller)->with('sale', function ($query) {
-            $query->whereMonth('sale_date', '3');
+        $total_penjualan_reseller_bulan = Reseller::where('id', $reseller->id)->with('sale', function ($query) {
+            $current_month = Carbon::now()->month;
+            $query->whereMonth('sale_date', $current_month);
             })->get();
 
-        $bonus_bulan = Reseller::where('user_id', $reseller)->with('sale', function ($query) {
-            $query->whereMonth('sale_date', '3');
+        $bonus_bulan = Reseller::where('id', $reseller->id)->with('sale', function ($query) {
+            $current_month = Carbon::now()->month;
+            $query->whereMonth('sale_date', $current_month);
             })->get();
-
-        $sales = Sale::where('reseller_id', $reseller->id)->whereMonth('sale_date', '3')->get();
-
-        // $sales = Sale::whereMonth('sale_date', '3')
-        // ->groupBy(DB::raw('Date(sale_date)'))
-        // ->orderBy('sale_date', 'DESC')->get();
-
-        // $sales = Sale::select(
-        //     "id" ,
-        //     DB::raw("(sum(quantity)) as qty"),
-        //     DB::raw("(DATE_FORMAT(created_at, '%d-%m-%Y')) as tgl")
-        //     )
-        //     ->orderBy('created_at')
-        //     ->get();
-
-        // $sales = Sale::where('reseller_id', $reseller->id)->where('created_at', '>=', Carbon::now()->subMonth())
-        //     ->groupBy('date')
-        //     ->orderBy('date', 'DESC')
-        //     ->get(array(
-        //         DB::raw('Date(created_at) as date'),
-        //         DB::raw('sum(quantity) as qty')
-        //     ));
-
-        // $sales = Sale::where('reseller_id', $reseller->id)->select('id', 'quantity', 'created_at')
-        //     ->get()
-        //     ->groupBy(function($date) {
-        //         return Carbon::parse($date->created_at)->format('m'); // grouping by mounth
-        //     });
-
         
-        // $sales2= Sale::where('reseller_id', $reseller->id)->select('id','quantity', 'created_at')
-        // ->get()
-        // ->groupBy(function($val) {
-        // return Carbon::parse($val->created_at)->format('m');
-        // });
+        $current_month = Carbon::now()->month;
 
-        $sales2 = Sale::where('reseller_id', $reseller->id)->orderBy('created_at')->get()->groupBy(function($data) {
-            return $data->created_at->format('d');
-        });
+        $request_month = $request->get('search_month');
+        $get_month = substr($request_month, 5);
 
-        $sales3 = Sale::where('reseller_id', $reseller->id)
-        ->orderBy('sale_date')
-        ->get()
-        ->groupBy(function ($val) {
-            return Carbon::parse($val->sale_date)->format('d M Y');
-        });
+        if ($request_month) {
+            $sales3 = Sale::where('reseller_id', $reseller->id)->whereMonth('sale_date', $get_month)
+            ->orderBy('sale_date')
+            ->get()
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->sale_date)->format('d M Y');
+            });
+        } else {
+            $sales3 = Sale::where('reseller_id', $reseller->id)->whereMonth('sale_date', $current_month)
+            ->orderBy('sale_date')
+            ->get()
+            ->groupBy(function ($val) {
+                return Carbon::parse($val->sale_date)->format('d M Y');
+            });
+        }
 
-
-        // dd($sales2);
-
-
-        return view('pages.admin.member.detail-reseller', compact('reseller' ,'member' ,'sales', 'sales2', 'sales3', 'total_penjualan_pribadi_tahun', 'total_penjualan_tim_tahun', 'total_penjualan_reseller_bulan', 'bonus_bulan'));
+        return view('pages.admin.member.detail-reseller', compact('reseller' ,'member' ,'sales3', 'total_penjualan_pribadi_tahun', 'total_penjualan_tim_tahun', 'total_penjualan_reseller_bulan', 'bonus_bulan'));
     }
 
     public function update(Request $request)
@@ -185,7 +176,7 @@ class MemberController extends Controller
         $member->username = $request->get('username');
         $member->agent_id = $request->get('agent');
         $member->save();
-        toast('Data Berhasil Diubah','success');
+        toast('Data Agen Berhasil Diubah','success');
         return redirect()->back();
     }
 
@@ -193,9 +184,9 @@ class MemberController extends Controller
     {
         $reseller = Reseller::find($request->id);
         $reseller->name = $request->get('name');
-        $reseller->point = $request->get('point');
+        $reseller->reseller_id = $request->get('resellerid');
         $reseller->save();
-        toast('Data Berhasil Diubah','success');
+        toast('Data Reseller Berhasil Diubah','success');
         return redirect()->back();
     }
 
@@ -211,7 +202,9 @@ class MemberController extends Controller
                         'user_id' => $request->user_id,
                         'name' => $request->name_reseller[$i],
                         'reseller_id' => $request->reseller_id[$i],
-                        'point' => '0'
+                        'point' => '0',
+                        'position' => 'Reseller',
+                        'bonus' => '0'
                     ]);
                 }
             } 

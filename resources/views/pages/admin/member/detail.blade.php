@@ -1,116 +1,5 @@
 @extends('layouts.admin')
 
-<style>
-    img {
-    max-width: 100%;
-    height: auto;
-    }
-
-    .item {
-        width: 120px;
-        height: 120px;
-        height: auto;
-        float: left;
-        margin: 3px;
-        padding: 3px;
-    }
-    #myImg {
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-    }
-
-    #myImg:hover {opacity: 0.7;}
-
-
-    #myImg2 {
-
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-    }
-
-    #myImg2:hover {opacity: 0.7;}
-
-    /* The Modal (background) */
-    .modal-image {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
-    }
-
-    /* Modal Content (image) */
-    .modal-content-image {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-    }
-
-    /* Caption of Modal Image */
-    #caption {
-    margin: auto;
-    display: block;
-    width: 80%;
-    max-width: 700px;
-    text-align: center;
-    color: #ccc;
-    padding: 10px 0;
-    height: 150px;
-    }
-
-    /* Add Animation */
-    .modal-content-image, #caption {  
-    -webkit-animation-name: zoom;
-    -webkit-animation-duration: 0.6s;
-    animation-name: zoom;
-    animation-duration: 0.6s;
-    }
-
-    @-webkit-keyframes zoom {
-    from {-webkit-transform:scale(0)} 
-    to {-webkit-transform:scale(1)}
-    }
-
-    @keyframes zoom {
-    from {transform:scale(0)} 
-    to {transform:scale(1)}
-    }
-
-    /* The Close Button */
-    .close {
-    position: absolute;
-    top: 15px;
-    right: 35px;
-    color: white;
-    font-size: 40px;
-    font-weight: bold;
-    transition: 0.1s;
-    }
-
-    .close:hover,
-    .close:focus {
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-    }
-
-    /* 100% Image Width on Smaller Screens */
-    @media only screen and (max-width: 700px){
-    .modal-content-image {
-    width: 100%;
-    }
-}
-</style>
-
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -205,7 +94,7 @@
                 @php
                 $totalC = array_sum($c);
                 @endphp
-                {{ $totalC }}
+                @currency($totalC)
             </div>
           </div>
         </div>
@@ -218,7 +107,19 @@
                 <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Penjualan</i></a>
                 </a>
             </div>
-            <div class="table-responsive">
+            <form action="{{ route('admin.member.detail', $member->id) }}">
+                <div class="row mt-2">
+                        <div class="col-4">
+                            <input type="month" id="search_month" name="search_month"
+                            min="2023-01" value="{{Request::get('search_month')}}">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white ml-3">
+                        </div>
+                </div>
+            </form>
+            <form action="{{ route('admin.member.detail', $member->id) }}">
+                <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white mt-2">
+            </form>
+            <div class="table-responsive mt-2">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
@@ -236,7 +137,15 @@
                         @foreach ($resellers as $reseller)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $reseller->reseller_id }} </td>
+                            <td>{{ $reseller->reseller_id }} 
+                            @if ($reseller->position == 'Agen')
+                                
+                            @else
+                            <a href="#" data-id="{{ $reseller->id }}" data-resellerid="{{ $reseller->reseller_id }}" data-name="{{ $reseller->name }}" data-toggle="modal" data-target="#editReseller"><i class="fas fa-edit" style="font-size: 70%"></i></a>
+                            @endif
+                            
+                            
+                            </td>
                             <td>{{ $reseller->name }}</td>
                             <td>
                                 {{ $reseller->sale->sum('quantity') }} <a href="{{ route('admin.member.detailReseller', ['agent'=>$member->id,'reseller'=>$reseller->id]) }}"><i class="fas fa-eye"></i></a>
@@ -254,13 +163,6 @@
 <!-- /.container-fluid -->
 {{-- modal --}}
 
-<!-- The Modal -->
-<div id="myModal" class="modal-image">
-    <span class="close">&times;</span>
-    <img id="modal-img" class="modal-content-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQS2ol73JZj6-IqypxPZXYS3rRiPwKteoD8vezk9QsRdkjt3jEn&usqp=CAU">
-    <div id="caption"></div>
-</div>
-
 <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -269,7 +171,7 @@
                 @method('PUT')
                 <input type="hidden" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span>Ubah</span> Data Member</h5>
+                    <h5 class="modal-title"><span>Ubah</span> Data Agen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -297,15 +199,6 @@
                         <label for="name">Nama</label>
                         <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
                         @error('name')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="total_point">Total Point</label>
-                        <input type="number" class="form-control @error('total_point') is-invalid @enderror" id="total_point" name="totalp" required>
-                        @error('total_point')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -346,9 +239,9 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="point">Point</label>
-                        <input type="text" class="form-control @error('point') is-invalid @enderror" id="point" name="point" required>
-                        @error('point')
+                        <label for="resellerid">Id Reseller</label>
+                        <input type="text" class="form-control @error('resellerid') is-invalid @enderror" id="resellerid" name="resellerid" required>
+                        @error('resellerid')
                         <div class="invalid-feedback">
                             {{$message}}
                         </div>
@@ -379,6 +272,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <i style="font-size: 80%; color:grey">Jika tidak ada perolehan pada Bonus atau Point, silahkan isi dengan angka 0</i>
+                    <hr>
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
@@ -523,53 +418,20 @@
             var name = $(e.relatedTarget).data('name');
             var username = $(e.relatedTarget).data('username');
             var agent = $(e.relatedTarget).data('agent');
-            var totalp = $(e.relatedTarget).data('totalp');
             $('#edit').find('input[name="id"]').val(id);
             $('#edit').find('input[name="name"]').val(name);
             $('#edit').find('input[name="username"]').val(username);
             $('#edit').find('input[name="agent"]').val(agent);
-            $('#edit').find('input[name="totalp"]').val(totalp);
         });
 
         $("#editReseller").on('show.bs.modal', (e) => {
             var id = $(e.relatedTarget).data('id');
             var name = $(e.relatedTarget).data('name');
-            var point = $(e.relatedTarget).data('point');
+            var resellerid = $(e.relatedTarget).data('resellerid');
             $('#editReseller').find('input[name="id"]').val(id);
             $('#editReseller').find('input[name="name"]').val(name);
-            $('#editReseller').find('input[name="point"]').val(point);
+            $('#editReseller').find('input[name="resellerid"]').val(resellerid);
         });
-
-         // Get the modal
-        var modal = document.getElementById("myModal");
-
-        // Get the image and insert it inside the modal - use its "alt" text as a caption
-        // var img = document.getElementById("myImg");
-        var modalImg = document.getElementById("modal-img");
-        var captionText = document.getElementById("caption");
-        // img.onclick = function(){
-        //   modal.style.display = "block";
-        //   modalImg.src = this.src;
-        //   captionText.innerHTML = this.alt;
-        // }
-
-
-        document.addEventListener("click", (e) => {
-        const elem = e.target;
-        if (elem.id==="myImg") {
-            modal.style.display = "block";
-            modalImg.src = elem.dataset.biggerSrc || elem.src;
-            captionText.innerHTML = elem.alt; 
-        }
-        })
-
-        // Get the <span> element that closes the modal
-        var span = document.getElementsByClassName("close")[0];
-
-        // When the user clicks on <span> (x), close the modal
-        span.onclick = function() { 
-        modal.style.display = "none";
-        }
 
 
           //utk tambah yg sudah ada

@@ -78,6 +78,7 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'isMember'])->grou
 
     Route::prefix('reseller')->name('reseller.')->group(function () {
         Route::get('', [MemberResellerController::class, 'index'])->name('index');
+        Route::get('detail/{agent}/detailReseller/{reseller}', [MemberResellerController::class, 'detailReseller'])->name('detailReseller');
     });
 });
 

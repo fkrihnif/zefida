@@ -117,8 +117,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Detail Tim</h1>
-        <a href="#" data-toggle="modal" data-target="#tambahReseller"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Reseller</i></a>
+        <h1 class="h3 mb-0 text-gray-800">Detail Reseller</h1>
     </a>
     </div>
     <a href="{{ route('admin.member.detail', $member->id) }}"><i class="fas fa-arrow-left" style="font-size: 85%"> Kembali</i></a>
@@ -129,7 +128,6 @@
            <div class="row">
             <div class="col-4"><b>Id No</b></div>
             <div class="col-6">: {{ $member->agent_id }}</div>
-            <div class="col-2"><a href="#" data-id="{{ $member->id }}" data-agent="{{ $member->agent_id }}" data-username="{{ $member->username }}" data-name="{{ $member->name }}" data-totalp="{{ $member->total_point }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit">Edit</i></a></div>
            </div>
            <div class="row">
             <div class="col-4"><b>Username</b></div>
@@ -172,7 +170,7 @@
           <br>
           <div class="row justify-content-end">
             <div class="col-3" style="border: 1px solid black;">
-              Total Penjualan {{ $reseller->name }}
+              Total Penjualan <b>{{ $reseller->name }}</b>
             </div>
             <div class="col-3" style="border: 1px solid black;">
                 @php
@@ -191,7 +189,7 @@
           </div>
           <div class="row justify-content-end">
             <div class="col-3" style="border: 1px solid black;">
-              Bonus Bulan Ini
+              Bonus Anda
             </div>
             <div class="col-3" style="border: 1px solid black;">
                 @php
@@ -205,7 +203,7 @@
                 @php
                 $totalC = array_sum($c);
                 @endphp
-                {{ $totalC }}
+                @currency($totalC)
             </div>
           </div>
         </div>
@@ -213,9 +211,22 @@
 
     <div class="card shadow">
         <div class="card-body">
-            <p>{{ $reseller->reseller_id }} - {{ $reseller->name }}</p>
+            <h4><u>Detail Penjualan</u></h4>
+            <b>{{ $reseller->reseller_id }} - {{ $reseller->name }}</b>
+            <form action="{{ route('admin.member.detailReseller', ['agent'=>$member->id,'reseller'=>$reseller->id]) }}">
+                <div class="row mt-2">
+                        <div class="col-4">
+                            <input type="month" id="search_month" name="search_month"
+                            min="2023-01" value="{{Request::get('search_month')}}">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white ml-3">
+                        </div>
+                </div>
+            </form>
+            <form action="{{ route('admin.member.detailReseller', ['agent'=>$member->id,'reseller'=>$reseller->id]) }}">
+                <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white">
+            </form>
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Tgl</th>
@@ -228,18 +239,25 @@
     
                     <tbody>
                         @foreach ($sales3 as $days => $day)
-                        <tr>
-                            <td colspan="5"><b>{{ $days }}</b></td>
-                        </tr>
-                            @foreach ($day as $item)
-                        <tr>
-                            <td>{{ $loop->count }}</td>
-                                <td>{{ $item->product->name }}</td>
-                                <td>{{ $item->quantity }}</td>
-                                <td>{{ $item->point_earn }}</td>
-                                <td>{{ $item->bonus_earn }}</td>  
-                        </tr>
-                        @endforeach
+                            @php
+                                $i = 0;
+                            @endphp
+                            @foreach ($day as $key => $item)
+                            <tr>    
+                                @if ($i == 0)
+                                    <td
+                                        rowspan="{{ $loop->count }}"
+                                     ><b>{{ $days }}</b></td>
+                                     @endif
+                                    <td>{{ $item->product->name }}</td>
+                                    <td>{{ $item->quantity }}</td>
+                                    <td>{{ $item->point_earn }}</td>
+                                    <td>@currency($item->bonus_earn)</td>  
+                            </tr>
+                            @php
+                                $i++;
+                            @endphp
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -262,27 +280,6 @@
 @endsection
 @push('addon-script')
     <script>
-        $("#edit").on('show.bs.modal', (e) => {
-            var id = $(e.relatedTarget).data('id');
-            var name = $(e.relatedTarget).data('name');
-            var username = $(e.relatedTarget).data('username');
-            var agent = $(e.relatedTarget).data('agent');
-            var totalp = $(e.relatedTarget).data('totalp');
-            $('#edit').find('input[name="id"]').val(id);
-            $('#edit').find('input[name="name"]').val(name);
-            $('#edit').find('input[name="username"]').val(username);
-            $('#edit').find('input[name="agent"]').val(agent);
-            $('#edit').find('input[name="totalp"]').val(totalp);
-        });
-
-        $("#editReseller").on('show.bs.modal', (e) => {
-            var id = $(e.relatedTarget).data('id');
-            var name = $(e.relatedTarget).data('name');
-            var point = $(e.relatedTarget).data('point');
-            $('#editReseller').find('input[name="id"]').val(id);
-            $('#editReseller').find('input[name="name"]').val(name);
-            $('#editReseller').find('input[name="point"]').val(point);
-        });
 
          // Get the modal
         var modal = document.getElementById("myModal");
@@ -315,54 +312,6 @@
         modal.style.display = "none";
         }
 
-
-          //utk tambah yg sudah ada
-     $(document).ready(function() {
-        var max_fields      = 50; //maximum input boxes allowed
-        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
-        var add_button      = $(".add_field_button"); //Add button ID
-        var x = 1; //initlal text box count
-        $(add_button).click(function(e){ //on add input button click
-            e.preventDefault();
-            if(x < max_fields){ //max input box allowed
-                x++; //text box increment
-                $(wrapper).append(`
-                    <div class="container">
-                        <div class="row input_fields_wrap">
-                            <div class="col-5">
-                                <div class="form-group">
-                                <label for="name_reseller">Tim Reseller</label>
-                                <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
-                                @error('name_reseller')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="reseller_id">ID Reseller</label>
-                                    <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
-                                    @error('reseller_id')
-                                    <div class="invalid-feedback">
-                                        {{$message}}
-                                    </div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-primary remove_field" style="margin-top: 27px;">Hapus</button>
-                            </div>
-                        </div>
-                    </div>`); //add input box
-            }
-        });
-        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-            e.preventDefault(); 
-            $(this).parent().parent().remove(); x--;
-        })
-    });
     </script>
 
 

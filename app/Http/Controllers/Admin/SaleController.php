@@ -24,13 +24,15 @@ class SaleController extends Controller
         try {
             $sale = Sale::find($request->id);
     
-            //kurangi point reseller
+            //kurangi point, bonus reseller
             $reseller = Reseller::find($sale->reseller_id);
             $point_old = $reseller->point;
             $reseller->point = $point_old - $sale->point_earn;
+            $bonus_old = $reseller->bonus;
+            $reseller->bonus = $bonus_old - $sale->bonus_earn;
             $reseller->save();
     
-            //kurangi total point member
+            //kurangi total point, bonus member
             $member = User::find($sale->user_id);
             $point_old_member = $member->total_point;
             $member->total_point = $point_old_member - $sale->point_earn;

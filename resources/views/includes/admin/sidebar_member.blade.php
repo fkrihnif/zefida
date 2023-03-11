@@ -15,10 +15,10 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-    <li class="nav-item {{ request()->is('member/reseller') ?'active' : '' }}">
+    <li class="nav-item {{ request()->is('member/reseller') || request()->is('member/reseller/detail/*/detailReseller/*') ?'active' : '' }}">
         <a class="nav-link" href="{{ route('member.reseller.index') }}">
             <i class="fas fa-fw fa-user"></i>
-            <span>Member</span></a>
+            <span>Tim</span></a>
     </li>
 
 
