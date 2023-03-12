@@ -20,6 +20,11 @@
             <i class="fas fa-fw fa-user"></i>
             <span>Tim</span></a>
     </li>
+    <li class="nav-item {{ request()->is('member/profile/changePassword') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('member.profile.changePassword') }}">
+            <i class="fas fa-fw fa-cogs""></i>
+            <span>Ganti Password</span></a>
+    </li>
 
 
 

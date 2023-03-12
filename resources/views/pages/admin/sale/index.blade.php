@@ -117,11 +117,23 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Data Semua Penjualan</h1>
+        <h1 class="h3 mb-0 text-gray-800">Data Penjualan Per-Bulan</h1>
     </div>
 
     <div class="card shadow mb-4">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
+            <form action="{{ route('admin.sale.index') }}">
+                <div class="row">
+                        <div class="col-4">
+                            <input type="month" id="search_month" name="search_month"
+                            min="2023-01" value="{{Request::get('search_month')}}">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white ml-3">
+                        </div>
+                </div>
+            </form>
+            <form action="{{ route('admin.sale.index') }}">
+                <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white">
+            </form>
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -192,7 +204,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus penjualan ini ? <b><i>point reseller akan dipulihkan</i></b>
+                    Apakah Anda yakin ingin menghapus penjualan ini ? <b><i>point, bonus reseller akan dipulihkan</i></b>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>

@@ -20,7 +20,7 @@ class ProductController extends Controller
             'name' => 'required',
             'description' => 'required',
             'price' => 'required',
-            'image' => 'mimes:JPG,jpeg,png,jpg,SVG,svg|max:1024',
+            'image' => 'mimes:JPG,jpeg,png,jpg,SVG,svg|max:3072',
         ]);
         $product = new Product();
         $product->name = $request->get('name');
@@ -38,7 +38,7 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $validatedData = $request->validate([
-            'image' => 'mimes:JPG,jpeg,png,jpg,SVG,svg|max:1024',
+            'image' => 'mimes:JPG,jpeg,png,jpg,SVG,svg|max:3072',
         ]);
         $product = Product::find($request->id);
 

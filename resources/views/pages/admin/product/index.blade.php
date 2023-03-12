@@ -123,7 +123,7 @@
     </div>
 
     <div class="card shadow mb-4">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -224,7 +224,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="image">Gambar</label>
+                        <label for="image">Gambar <i style="font-size: 70%">PNG/Jpg/Jpeg/SVG. Max 3Mb</i></label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
                         @error('image')
                         <div class="invalid-feedback">
@@ -256,7 +256,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus Produk ini ?
+                    Apakah Anda yakin ingin menghapus Produk ini ? <b>Semua Penjualan yang Berkaitan dengan Produk ini Juga akan Terhapus</b>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -309,7 +309,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
-                        <label for="image">Gambar</label>
+                        <label for="image">Gambar <i style="font-size: 70%">PNG/Jpg/Jpeg/SVG. Max 3Mb</i></label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" required>
                         @error('image')
                         <div class="invalid-feedback">

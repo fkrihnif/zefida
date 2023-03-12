@@ -12,7 +12,7 @@
 
 
     <div class="card shadow mb-4 mt-2">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
            <div class="row">
             <div class="col-4"><b>Id No</b></div>
             <div class="col-6">: {{ $member->agent_id }}</div>
@@ -98,7 +98,7 @@
     </div>
 
     <div class="card shadow">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                 <h1 class="h3 mb-0 text-gray-800">Data Penjualan Reseller</h1>
             </div>

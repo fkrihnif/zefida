@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\SaleController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
 use App\Http\Controllers\Member\ResellerController as MemberResellerController;
+use App\Http\Controllers\Member\ProfileController as MemberProfileController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -79,6 +80,10 @@ Route::prefix('member')->name('member.')->middleware(['auth', 'isMember'])->grou
     Route::prefix('reseller')->name('reseller.')->group(function () {
         Route::get('', [MemberResellerController::class, 'index'])->name('index');
         Route::get('detail/{agent}/detailReseller/{reseller}', [MemberResellerController::class, 'detailReseller'])->name('detailReseller');
+    });
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('changePassword', [MemberProfileController::class, 'changePassword'])->name('changePassword');
+        Route::put('savePassword/{id}', [MemberProfileController::class, 'savePassword'])->name('savePassword');
     });
 });
 

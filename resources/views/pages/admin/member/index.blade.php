@@ -6,13 +6,13 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Member</h1>
-        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Member</i></a>
+        <h1 class="h3 mb-0 text-gray-800">Tim</h1>
+        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Agen</i></a>
         </a>
     </div>
 
     <div class="card shadow mb-4">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -179,7 +179,7 @@
                         </div>
                     </div>
                     <hr>
-
+                    <i style="font-size: 70%" class="ml-3">Silahkan kosongkan reseller jika blm ada tim</i>
                     <div class="row input_fields_wrap">
                         <div class="col-5">
                             <div class="form-group ml-3">

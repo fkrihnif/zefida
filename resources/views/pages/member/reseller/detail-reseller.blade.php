@@ -13,7 +13,7 @@
 
 
     <div class="card shadow mb-4 mt-2">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
            <div class="row">
             <div class="col-4"><b>Id No</b></div>
             <div class="col-6">: {{ $member->agent_id }}</div>
@@ -99,7 +99,7 @@
     </div>
 
     <div class="card shadow">
-        <div class="card-body">
+        <div class="card-body" style="background-color: #f5f6fa">
             <h4><u>Detail Penjualan</u></h4>
             <b>{{ $reseller->reseller_id }} - {{ $reseller->name }}</b>
             <form action="{{ route('member.reseller.detailReseller', ['agent'=>$member->id,'reseller'=>$reseller->id]) }}">

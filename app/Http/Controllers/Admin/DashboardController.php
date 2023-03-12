@@ -8,7 +8,7 @@ use App\Models\Reseller;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Sale;
-
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -16,7 +16,8 @@ class DashboardController extends Controller
         $member = User::where('role', 1)->count();
         $reseller = Reseller::count();
         $product = Product::count();
-        $sell_item = Sale::sum('quantity');
+        $current_year = Carbon::now()->year;
+        $sell_item = Sale::whereYear('sale_date', $current_year)->sum('quantity');
 
 
         return view('pages.admin.dashboard.index', compact('member', 'reseller', 'product', 'sell_item'));

@@ -9,11 +9,21 @@ use App\Models\Product;
 use App\Models\Reseller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class SaleController extends Controller
 {
-    public function index(){
-        $sales = Sale::orderBy('id', 'DESC')->get();
+    public function index(Request $request){
+        $request_month = $request->get('search_month');
+        $get_month = substr($request_month, 5);
+        $current_month = Carbon::now()->month;
+
+        if ($request_month) {
+            $sales = Sale::whereMonth('sale_date', $get_month)->orderBy('sale_date')->get();
+        } else {
+            $sales = Sale::whereMonth('sale_date', $current_month)->orderBy('sale_date')->get();
+        }
+        
         return view('pages.admin.sale.index', compact('sales'));
     }
 
