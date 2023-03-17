@@ -6,9 +6,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" type="image/favicon.png" href="{{ url('front/img/logo-sgu.png') }}">
+    <meta name="author" content="Tim Zefida">
+    <meta name="keywords" content="Tim Zefida" />
+    <meta name="description" content="Tim Zefida">
+    <link rel="icon" type="image/favicon.png" href="{{ url('template/img/favl.png') }}">
 
     <title>Zefida</title>
     @include('includes.admin.style')

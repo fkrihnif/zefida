@@ -83,12 +83,12 @@ class MemberController extends Controller
             $query->whereYear('sale_date', $current_year);
             })->get();
         
-        $total_penjualan_tim_tahun = Reseller::where('user_id', $id)->with('sale', function ($query) {
+        $total_penjualan_tim_tahun = Reseller::where('user_id', $id)->where('position', 'Reseller')->with('sale', function ($query) {
             $current_year = Carbon::now()->year;
             $query->whereYear('sale_date', $current_year);
             })->get();
         
-        $total_penjualan_tim_bulan = Reseller::where('user_id', $id)->with('sale', function ($query) {
+        $total_penjualan_tim_bulan = Reseller::where('user_id', $id)->where('position', 'Reseller')->with('sale', function ($query) {
             $current_month = Carbon::now()->month;
             $query->whereMonth('sale_date', $current_month);
             })->get();

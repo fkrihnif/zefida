@@ -13,8 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('sales', function (Blueprint $table) {
-            $table->string('bonus_earn')->nullable();
+        Schema::create('agen_reseller', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->foreignId('user_agent_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('user_reseller_id');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('sales', function (Blueprint $table) {
-            $table->dropColumn('bonus_earn');
-        });
+        Schema::dropIfExists('agen_reseller');
     }
 };

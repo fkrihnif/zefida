@@ -22,15 +22,23 @@ class UserSeeder extends Seeder
             'username' => 'admin123',
             'password' => Hash::make('password123'),
             'role' => '0',
-            'agent_id' => 'Admin'
+            'identity_id' => 'Admin'
         ]);
-        // create member
+        // create Reseller
         User::create([
-            'name' => 'Member',
-            'username' => 'member123',
+            'name' => 'Fikri',
+            'username' => 'fikri123',
             'password' => Hash::make('password123'),
             'role' => '1',
-            'agent_id' => 'Agen_0001'
+            'identity_id' => '00001'
+        ]);
+        // create Agent
+        User::create([
+            'name' => 'Hanif',
+            'username' => 'hanif123',
+            'password' => Hash::make('password123'),
+            'role' => '2',
+            'identity_id' => '00002'
         ]);
     }
 }

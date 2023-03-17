@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('resellers', function (Blueprint $table) {
-            $table->string('bonus')->nullable();
-            $table->string('reseller_id');
+        Schema::create('banners', function (Blueprint $table) {
+            $table->id();
+            $table->text('image');
+            $table->text('description')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -26,9 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('resellers', function (Blueprint $table) {
-            $table->dropColumn('bonus');
-            $table->dropColumn('reseller_id');
-        });
+        Schema::dropIfExists('banners');
     }
 };

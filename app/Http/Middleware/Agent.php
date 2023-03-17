@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class Member
+class Agent
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class Member
      */
     public function handle(Request $request, Closure $next)
     {
-        if(auth()->user()->role != '1'){
+        if(auth()->user()->role != '2'){
             return redirect()->back();
         }
         return $next($request);

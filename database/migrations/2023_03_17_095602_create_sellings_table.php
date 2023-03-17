@@ -13,11 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('resellers', function (Blueprint $table) {
+        Schema::create('sellings', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('name');
-            $table->string('point');
+            $table->foreignId('product_id')->references('id')->on('products')->onDelete('cascade');
+            $table->string('quantity');
+            $table->date('sale_date');
+            $table->string('package_earn')->nullable();
+            $table->string('bonus_earn')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('resellers');
+        Schema::dropIfExists('sellings');
     }
 };

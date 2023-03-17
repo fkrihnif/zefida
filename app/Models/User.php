@@ -22,7 +22,7 @@ class User extends Authenticatable
         'username',
         'password',
         'role',
-        'agent_id'
+        'identity_id'
     ];
 
     /**
@@ -44,12 +44,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function reseller()
+    public function agent_reseller()
     {
-        return $this->hasMany(Reseller::class);
+        return $this->hasMany(AgentReseller::class);
     }
-    public function sale()
+    public function selling()
     {
-        return $this->hasMany(Sale::class);
+        return $this->hasMany(Selling::class);
     }
 }

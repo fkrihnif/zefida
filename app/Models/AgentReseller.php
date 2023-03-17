@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reseller extends Model
+class AgentReseller extends Model
 {
     use HasFactory;
-    protected $table = 'resellers';
+    protected $table = 'agen_reseller';
     protected $guarded = [];
 
-    public function sale()
+    public function user()
     {
-        return $this->hasMany(Sale::class);
+        return $this->belongsTo(User::class);
     }
 }
