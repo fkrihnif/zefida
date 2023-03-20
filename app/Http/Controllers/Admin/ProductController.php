@@ -26,6 +26,7 @@ class ProductController extends Controller
         $product->name = $request->get('name');
         $product->description = $request->get('description');
         $product->price = $request->get('price');
+        $product->is_package = $request->get('is_package');
         if ($request->file('image')) {
             $file = $request->file('image')->store('produk', 'public');
             $product->image = $file;
@@ -45,6 +46,7 @@ class ProductController extends Controller
         $product->name = $request->get('name');
         $product->description = $request->get('description');
         $product->price = $request->get('price');
+        $product->is_package = $request->get('is_package');
         if ($request->file('image')) {
             if ($product->image && file_exists(storage_path('app/public/' . $product->image))) {
                 \Storage::delete('public/' . $product->image);

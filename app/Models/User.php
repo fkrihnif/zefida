@@ -46,8 +46,9 @@ class User extends Authenticatable
 
     public function agent_reseller()
     {
-        return $this->hasMany(AgentReseller::class);
+        return $this->hasMany(AgentReseller::class, 'user_agent_id', 'id');
     }
+
     public function selling()
     {
         return $this->hasMany(Selling::class);

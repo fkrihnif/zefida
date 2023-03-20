@@ -6,8 +6,8 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Tim</h1>
-        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Agen</i></a>
+        <h1 class="h3 mb-0 text-gray-800">Data Agen</h1>
+        <a href="#" data-toggle="modal" data-target="#tambahAgent"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Agen</i></a>
         </a>
     </div>
 
@@ -18,10 +18,8 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Id_Agen</th>
-                            <th>Username</th>
-                            <th>Nama</th>
-                            <th>Tim Reseller</th>
+                            <th>Id</th>
+                            <th>Nama - Username</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -30,31 +28,14 @@
                         <?php
                         $i = 1;
                         ?>
-                        @foreach ($members as $member)
+                        @foreach ($agents as $agent)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $member->agent_id }}</td>
-                            <td>{{ $member->username }}</td>
-                            <td>{{ $member->name }} <br>
-                            <b style="font-size: 85%">Total Point:</b> {{ $member->total_point }}
-                            </td>
+                            <td>{{ $agent->identity_id }}</td>
+                            <td>{{ $agent->name }} - {{ $agent->username }}</td>
                             <td>
-                                    @php
-                                        $count = 0;
-                                    @endphp
-                                    @foreach ($member->reseller as $key=>$reseller)
-                                    <?php if($count == 3) break; ?>
-                                        <li style="font-size: 80%">{{ $reseller->name }} - ({{$reseller->point}})</li>
-                                    <?php $count++; ?>
-                                    @endforeach
-                                    @if (count($member->reseller) > 3)
-                                        <i style="font-size: 90%">....</i>
-                                    @endif
-                             
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.member.detail', $member->id) }}"><i class="fa fa-eye"></i></a>
-                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-trash"></i></a> | <a href="#" style="color: orange" data-target="#reset" data-toggle="modal" data-id="{{ $member->id }}"><i class="fas fa-cog" style="font-size: 80%">Reset Password</i></a>
+                                <a href="{{ route('admin.tim.detail', $agent->id) }}"><i class="fa fa-eye"></i></a>
+                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $agent->id }}"><i class="fas fa-trash"></i></a> | <a href="#" style="color: orange" data-target="#reset" data-toggle="modal" data-id="{{ $agent->id }}"><i class="fas fa-cog" style="font-size: 80%">Reset Password</i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -71,7 +52,7 @@
 <div class="modal fade" id="reset" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.member.resetPassword') }}" method="POST">
+            <form action="{{ route('admin.tim.resetPassword') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id">
                 <div class="modal-header">
@@ -95,7 +76,7 @@
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.member.delete') }}" method="POST">
+            <form action="{{ route('admin.tim.delete') }}" method="POST">
                 @csrf
                 @method('delete')
                 <input type="hidden" name="id">
@@ -117,26 +98,25 @@
     </div>
 </div>
 
-
-<div class="modal fade bd-example-modal-lg" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="tambahAgent" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.member.store') }}" method="POST">
+            <form action="{{ route('admin.tim.storeAgent') }}" method="POST">
                 @csrf
                 <input type="hidden" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span>Tambah</span> Member</h5>
+                    <h5 class="modal-title"><span>Tambah</span> Agent</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="row">
+                    <div class="row input_fields_wrap">
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="name">Nama</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required autocomplete="off">
+                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" autocomplete="off" required>
                                 @error('name')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -146,8 +126,8 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}" required autocomplete="off">
+                                <label for="username_">Username</label>
+                                <input type="text" class="form-control @error('username') is-invalid @enderror" id="username" name="username" value="{{ old('username') }}" autocomplete="off" required>
                                 @error('username')
                                 <div class="invalid-feedback">
                                     {{$message}}
@@ -157,54 +137,14 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="agent_id">Id_Agen</label>
-                                <input type="text" class="form-control @error('agent_id') is-invalid @enderror" id="agent_id" name="agent_id" value="{{ old('agent_id') }}" required autocomplete="off">
-                                @error('agent_id')
+                                <label for="id">ID</label>
+                                <input type="text" class="form-control @error('id') is-invalid @enderror" id="id" name="id" value="{{ old('id') }}" autocomplete="off" required>
+                                @error('id')
                                 <div class="invalid-feedback">
                                     {{$message}}
                                 </div>
                                 @enderror
                             </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" value="{{ old('password') }}" required autocomplete="off">
-                                @error('password')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <i style="font-size: 70%" class="ml-3">Silahkan kosongkan reseller jika blm ada tim</i>
-                    <div class="row input_fields_wrap">
-                        <div class="col-5">
-                            <div class="form-group ml-3">
-                                <label for="name_reseller">Nama Reseller</label>
-                                <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
-                                @error('name_reseller')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label for="reseller_id">ID Reseller</label>
-                                <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
-                                @error('reseller_id')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <button type="button" id="tambahKolom" class="btn btn-primary add_field_button" style="margin-top: 27px;">Tambah</button>
                         </div>
                     </div>
                 </div>
@@ -216,6 +156,7 @@
         </div>
     </div>
 </div>
+
 
 @endsection
 @push('addon-script')
@@ -283,8 +224,6 @@
             $(this).parent().parent().remove(); x--;
         })
     });
-
-
 </script>
 
 

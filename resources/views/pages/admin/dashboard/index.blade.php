@@ -18,7 +18,7 @@
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Jumlah Agen</div>
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
-                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $member }}</div>
+                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $agent }}</div>
                                 </div>
                             </div>
                         </div>

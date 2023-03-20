@@ -20,4 +20,8 @@ class Selling extends Model
     {
         return $this->belongsTo(Product::class);
     }
+    public function agent_reseller()
+    {
+        return $this->belongsTo(AgentReseller::class, 'user_id', 'user_reseller_id');
+    }
 }

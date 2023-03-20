@@ -23,13 +23,13 @@
             <i class="fas fa-fw fa-box"></i>
             <span>Produk</span></a>
     </li>
-    <li class="nav-item {{ request()->is('admin/member') || request()->is('admin/member/detail/*') || request()->is('admin/member/detail/*/detailReseller/*')  ?'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.member.index') }}">
+    <li class="nav-item {{ request()->is('admin/tim') || request()->is('admin/member/detail/*') || request()->is('admin/member/detail/*/detailReseller/*')  ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.tim.index') }}">
             <i class="fas fa-fw fa-user"></i>
             <span>Tim</span></a>
     </li>
-    <li class="nav-item {{ request()->is('admin/sale') ?'active' : '' }}">
-        <a class="nav-link" href="{{ route('admin.sale.index') }}">
+    <li class="nav-item {{ request()->is('admin/selling') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.selling.index') }}">
             <i class="fas fa-fw fa-cart-arrow-down"></i>
             <span>Data Penjualan</span></a>
     </li>

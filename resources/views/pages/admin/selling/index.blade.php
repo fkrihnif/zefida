@@ -118,11 +118,13 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Data Penjualan Per-Bulan</h1>
+        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Penjualan</i></a>
+    </a>
     </div>
 
     <div class="card shadow mb-4">
         <div class="card-body" style="background-color: #f5f6fa">
-            <form action="{{ route('admin.sale.index') }}">
+            <form action="{{ route('admin.selling.index') }}">
                 <div class="row">
                         <div class="col-4">
                             <input type="month" id="search_month" name="search_month"
@@ -131,7 +133,7 @@
                         </div>
                 </div>
             </form>
-            <form action="{{ route('admin.sale.index') }}">
+            <form action="{{ route('admin.selling.index') }}">
                 <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white">
             </form>
             <div class="table-responsive">
@@ -139,11 +141,10 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Id_Agen</th>
-                            <th>Reseller</th>
+                            <th>Id</th>
+                            <th>Nama</th>
                             <th>Produk</th>
                             <th>Quantity</th>
-                            <th>Point</th>
                             <th>Tanggal</th>
                             <th>Action</th>
                         </tr>
@@ -153,21 +154,20 @@
                         <?php
                         $i = 1;
                         ?>
-                        @foreach ($sales as $sale)
+                        @foreach ($selling as $s)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $sale->user->agent_id }}</td>
-                            <td>{{ $sale->reseller->name }}</td>
+                            <td>{{ $s->user->identity_id }}</td>
+                            <td>{{ $s->user->name }}</td>
                             <td> 
                             <div class="item">
-                                <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($sale->product->image) }}">
-                             </div> <br>
-                             {{ $sale->product->name }}
+                                <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($s->product->image) }}">
+                             </div> <br><br><br>
+                             {{ $s->product->name }}
                             </td>
-                            <td>{{ $sale->quantity }}</td>
-                            <td>{{ $sale->point_earn }}</td>
-                            <td>{{ date('d-m-Y', strtotime($sale->sale_date)) }}</td>
-                            <td><a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $sale->id }}"><i class="fas fa-trash"></i></a>
+                            <td>{{ $s->quantity }}</td>
+                            <td>{{ date('d-m-Y', strtotime($s->sale_date)) }}</td>
+                            <td><a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $s->id }}"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -190,10 +190,98 @@
     <div id="caption"></div>
 </div>
 
+<div class="modal fade bd-example-modal-lg" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="{{ route('admin.selling.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id">
+                <div class="modal-header">
+                    <h5 class="modal-title"><span>Tambah</span> Data Penjualan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <i style="font-size: 80%; color:grey">Jika tidak ada perolehan pada Bonus atau Point, silahkan isi dengan angka 0</i>
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="name">ID - Nama</label>
+                                    <select name="name" id="name"
+                                        class="form-control " required autofocus>
+                                        @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->identity_id }} - {{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="product_name">Produk <i style="font-size: 50%; color:red">(Klik Tulisan Produknya)</i></label>
+                                <input list="code" name="product_name" id="product_name" autocomplete="off" required class="form-control">
+                                    <datalist id="code">
+                                        @foreach($products as $product)
+                                        <option value="{{ $product->name }}">{{ $product->name }}</option>
+                                        @endforeach
+                                    </datalist>
+                                @error('product_name')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="quantity">Quantity</label>
+                                <input type="number" class="form-control @error('quantity') is-invalid @enderror" id="quantity" name="quantity" value="{{ old('quantity') }}" required autocomplete="off">
+                                @error('quantity')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="bonus_earn">Bonus yg didapat</label>
+                                <input type="number" class="form-control @error('bonus_earn') is-invalid @enderror" id="bonus_earn" name="bonus_earn" value="{{ old('bonus_earn') }}" required autocomplete="off">
+                                @error('bonus_earn')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="sale_date">Tanggal Penjualan</label>
+                                <input type="date" class="form-control @error('sale_date') is-invalid @enderror" id="sale_date" name="sale_date" value="{{ old('sale_date') }}" required autocomplete="off">
+                                @error('sale_date')
+                                <div class="invalid-feedback">
+                                    {{$message}}
+                                </div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.sale.delete') }}" method="POST">
+            <form action="{{ route('admin.selling.delete') }}" method="POST">
                 @csrf
                 @method('delete')
                 <input type="hidden" name="id">
