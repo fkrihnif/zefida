@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 
-@push('addon-style')
 <style>
     img {
     max-width: 100%;
@@ -110,16 +109,15 @@
     width: 100%;
     }
 }
-</style>    
-@endpush
+</style>
 
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Produk</h1>
-        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Produk</i></a>
+        <h1 class="h3 mb-0 text-gray-800">Banner</h1>
+        <a href="#" data-toggle="modal" data-target="#tambah"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Banner</i></a>
         </a>
     </div>
 
@@ -130,10 +128,7 @@
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Nama</th>
                             <th>Gambar</th>
-                            <th>Harga</th>
-                            <th>Deskripsi</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -142,32 +137,17 @@
                         <?php
                         $i = 1;
                         ?>
-                        @foreach ($products as $product)
+                        @foreach ($banners as $banner)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $product->name }}
-                            <hr>
-                            @if ($product->is_package == 1)
-                            <b style="color: green; font-size: 80%">Produk Paket</b>
-                            @else
-                            <b style="color: orange; font-size: 80%">Produk Eceran</b>
-                            @endif
-                            </td>
                             <td>
                                 <div class="item">
-                                    <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($product->image) }}">
+                                    <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($banner->image) }}">
                                  </div>
                             </td>
-                            <td>@if ($product->price)
-                                @currency($product->price)
-                                @else
-                                {{ $product->price }}
-                            @endif
-                                </td>
-                            <td>{{ $product->description }}</td>
                             <td>
-                                <a href="#" data-id="{{ $product->id }}" data-name="{{ $product->name }}" data-price="{{ $product->price }}" data-description="{{ $product->description }}" data-ispackage="{{ $product->is_package }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
-                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $product->id }}"><i class="fas fa-trash"></i></a>
+                                <a href="#" data-id="{{ $banner->id }}" data-toggle="modal" data-target="#edit"><i class="fas fa-edit"></i></a>
+                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $banner->id }}"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -193,52 +173,17 @@
 <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.product.update') }}" enctype="multipart/form-data" method="POST">
+            <form action="{{ route('admin.banner.update') }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 @method('PUT')
                 <input type="hidden" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span>Ubah</span> Data Produk</h5>
+                    <h5 class="modal-title"><span>Ubah</span> Banner</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nama</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
-                        @error('name')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="is_package">Apakah Ini Produk Paket?</label>
-                            <select name="is_package" id="is_package"
-                                class="form-control " required autofocus>
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Harga</label>
-                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
-                        @error('price')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Deskripsi Produk</label>
-                        <textarea class="form-control" name="description" id="description" cols="10" rows="3" required></textarea>
-                        @error('description')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
                     <div class="form-group">
                         <label for="image">Gambar <i style="font-size: 70%">PNG/Jpg/Jpeg/SVG. Max 3Mb</i></label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
@@ -261,7 +206,7 @@
 <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.product.delete') }}" method="POST">
+            <form action="{{ route('admin.banner.delete') }}" method="POST">
                 @csrf
                 @method('delete')
                 <input type="hidden" name="id">
@@ -272,7 +217,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus Produk ini ? <b>Semua Penjualan yang Berkaitan dengan Produk ini Juga akan Terhapus</b>
+                    Apakah Anda yakin ingin menghapus Banner ini ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -287,51 +232,16 @@
 <div class="modal fade" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.banner.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="id">
                 <div class="modal-header">
-                    <h5 class="modal-title"><span>Tambah</span> Data Produk</h5>
+                    <h5 class="modal-title"><span>Tambah</span> Banner</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="name">Nama</label>
-                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" required>
-                        @error('name')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="is_package">Apakah Ini Produk Paket?</label>
-                            <select name="is_package" id="is_package"
-                                class="form-control " required autofocus>
-                                <option value="0">Tidak</option>
-                                <option value="1">Ya</option>
-                            </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="price">Harga</label>
-                        <input type="number" class="form-control @error('price') is-invalid @enderror" id="price" name="price" required>
-                        @error('price')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="description">Deskripsi Produk</label>
-                        <textarea class="form-control" name="description" id="description" cols="10" rows="3" required></textarea>
-                        @error('description')
-                        <div class="invalid-feedback">
-                            {{$message}}
-                        </div>
-                        @enderror
-                    </div>
                     <div class="form-group">
                         <label for="image">Gambar <i style="font-size: 70%">PNG/Jpg/Jpeg/SVG. Max 3Mb</i></label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" required>
@@ -356,15 +266,7 @@
 <script>
     $("#edit").on('show.bs.modal', (e) => {
         var id = $(e.relatedTarget).data('id');
-        var name = $(e.relatedTarget).data('name');
-        var ispackage = $(e.relatedTarget).data('ispackage');
-        var price = $(e.relatedTarget).data('price');
-        var description = $(e.relatedTarget).data('description');
         $('#edit').find('input[name="id"]').val(id);
-        $('#edit').find('input[name="name"]').val(name);
-        $('#edit').find('select[name="is_package"]').val(ispackage);
-        $('#edit').find('input[name="price"]').val(price);
-        $('#edit').find('textarea[name="description"]').val(description);
     });
     
     $('#delete').on('show.bs.modal', (e) => {

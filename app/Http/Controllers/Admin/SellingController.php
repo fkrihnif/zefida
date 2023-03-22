@@ -13,19 +13,32 @@ use Carbon\Carbon;
 class SellingController extends Controller
 {
     public function index(Request $request){
-        $request_month = $request->get('search_month');
-        $get_month = substr($request_month, 5);
         $current_month = Carbon::now()->month;
         $products = Product::all();
         $users = User::where('role', '!=', 0)->get();
-
-        if ($request_month) {
-            $selling = Selling::whereMonth('sale_date', $get_month)->orderBy('sale_date', 'DESC')->get();
+        $fromDate = $request->get('from_date');
+        $toDate = $request->get('to_date');
+        if ($fromDate) {
+            $selling = Selling::whereRaw(
+                "(sale_date >= ? AND sale_date <= ?)", 
+                [
+                   $fromDate, 
+                   $toDate
+                ]
+              )->get();
+            
+            $pendapatan = Selling::whereRaw(
+                "(sale_date >= ? AND sale_date <= ?)", 
+                [
+                   $fromDate, 
+                   $toDate
+                ]
+              )->sum('total_price');
         } else {
             $selling = Selling::whereMonth('sale_date', $current_month)->orderBy('sale_date', 'DESC')->get();
+            $pendapatan = Selling::whereMonth('sale_date', $current_month)->sum('total_price');
         }
-        
-        return view('pages.admin.selling.index', compact('selling', 'products', 'users'));
+        return view('pages.admin.selling.index', compact('selling', 'products', 'users', 'pendapatan'));
     }
 
     public function store(Request $request) {
@@ -35,6 +48,7 @@ class SellingController extends Controller
             $selling->user_id = $request->get('name');
 
             $product_id = Product::where('name', $request->get('product_name'))->first()->id;
+            $product_price = Product::where('name', $request->get('product_name'))->first()->price;
             $selling->product_id = $product_id;
             $selling->quantity = $request->get('quantity');
 
@@ -47,6 +61,7 @@ class SellingController extends Controller
             }
             $selling->sale_date = $request->get('sale_date');
             $selling->bonus_earn = $request->get('bonus_earn');
+            $selling->total_price = $request->get('quantity') * $product_price;
             $selling->save();
 
             //cek status user, apakah agent atau masih reseller
@@ -69,5 +84,15 @@ class SellingController extends Controller
             toast('Data Penjualan Gagal Disimpan','error');
             return redirect()->back();
         }
+    }
+
+    public function delete(Request $request)
+    {
+            $selling = Selling::find($request->id);
+    
+            $selling->delete();
+
+            toast('Data Berhasil Dihapus','success');
+            return redirect()->back();
     }
 }

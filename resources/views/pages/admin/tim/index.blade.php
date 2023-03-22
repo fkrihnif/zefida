@@ -65,7 +65,7 @@
                     Apakah Anda yakin ingin mereset password Akun ini ? Password akan direset menjadi : password123
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-warning">Reset</button>
                 </div>
             </form>

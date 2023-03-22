@@ -18,12 +18,17 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+    <li class="nav-item {{ request()->is('admin/banner') ?'active' : '' }}">
+        <a class="nav-link" href="{{ route('admin.banner.index') }}">
+            <i class="fas fa-film"></i>
+            <span>Banner</span></a>
+    </li>
     <li class="nav-item {{ request()->is('admin/product') ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.product.index') }}">
             <i class="fas fa-fw fa-box"></i>
             <span>Produk</span></a>
     </li>
-    <li class="nav-item {{ request()->is('admin/tim') || request()->is('admin/member/detail/*') || request()->is('admin/member/detail/*/detailReseller/*')  ?'active' : '' }}">
+    <li class="nav-item {{ request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'active' : '' }}">
         <a class="nav-link" href="{{ route('admin.tim.index') }}">
             <i class="fas fa-fw fa-user"></i>
             <span>Tim</span></a>

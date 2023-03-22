@@ -1,4 +1,7 @@
 @extends('layouts.admin')
+@push('addon-style')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<meta name="csrf-token" content="{{ csrf_token() }}" />
 
 <style>
     img {
@@ -110,9 +113,11 @@
     }
 }
 </style>
+@endpush
 
 @section('content')
 <!-- Begin Page Content -->
+
 <div class="container-fluid">
 
     <!-- Page Heading -->
@@ -127,25 +132,38 @@
             <form action="{{ route('admin.selling.index') }}">
                 <div class="row">
                         <div class="col-4">
-                            <input type="month" id="search_month" name="search_month"
-                            min="2023-01" value="{{Request::get('search_month')}}">
-                            <input type="submit" value="Cari" class="btn btn-primary text-white ml-3">
+                            <label for="from_date">Dari Tanggal</label>
+                            <input type="date" id="from_date" name="from_date" value="{{Request::get('from_date')}}" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <label for="to_date">Hingga Tanggal</label>
+                            <input type="date" id="to_date" name="to_date" value="{{Request::get('to_date')}}" class="form-control">
+                        </div>
+                        <div class="col-4">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white btn-sm" style="margin-top: 35px">
                         </div>
                 </div>
-            </form>
-            <form action="{{ route('admin.selling.index') }}">
-                <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white">
-            </form>
+                </form>
+                <form action="{{ route('admin.selling.index') }}">
+                    <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white mt-2 mb-2">
+                </form>
+
+            @if (Request::get('to_date'))
+            <p>Total Pendapatan dari Tanggal <br>{{ date('d M Y', strtotime(Request::get('from_date'))) }} sampai {{ date('d M Y', strtotime(Request::get('to_date'))) }} =<b> @currency($pendapatan)</b></p>
+            @else
+            <p>Total Pendapatan Bulan ini :<b> @currency($pendapatan)</b></p>
+            @endif
+
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Id</th>
-                            <th>Nama</th>
+                            <th>Tanggal</th>
+                            <th>Id - Nama</th>
                             <th>Produk</th>
                             <th>Quantity</th>
-                            <th>Tanggal</th>
+                            <th>Harga</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -157,8 +175,8 @@
                         @foreach ($selling as $s)
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $s->user->identity_id }}</td>
-                            <td>{{ $s->user->name }}</td>
+                            <td>{{ date('d-m-Y', strtotime($s->sale_date)) }}</td>
+                            <td>{{ $s->user->identity_id }} <hr> {{ $s->user->name }}</td>
                             <td> 
                             <div class="item">
                                 <img style="height:50px"  id="myImg" class="img-fluid" src="{{ Storage::url($s->product->image) }}">
@@ -166,7 +184,7 @@
                              {{ $s->product->name }}
                             </td>
                             <td>{{ $s->quantity }}</td>
-                            <td>{{ date('d-m-Y', strtotime($s->sale_date)) }}</td>
+                            <td>@currency($s->product->price)</td>
                             <td><a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $s->id }}"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
@@ -190,7 +208,7 @@
     <div id="caption"></div>
 </div>
 
-<div class="modal fade bd-example-modal-lg" id="tambah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="tambah" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
 
     <div class="modal-dialog modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -207,13 +225,13 @@
                     <i style="font-size: 80%; color:grey">Jika tidak ada perolehan pada Bonus atau Point, silahkan isi dengan angka 0</i>
                     <hr>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <div class="form-group">
                                 <label for="name">ID - Nama</label>
-                                    <select name="name" id="name"
-                                        class="form-control " required autofocus>
-                                        @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->identity_id }} - {{ $user->name }}</option>
+                                    <select class="js-example-basic-single" name="name" id="name" required style="width: 100% !important;">
+                                        <option value="" selected></option>
+                                        @foreach($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->identity_id }} - {{ $user->name }}</option>
                                         @endforeach
                                     </select>
                             </div>
@@ -292,7 +310,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus penjualan ini ? <b><i>point, bonus reseller akan dipulihkan</i></b>
+                    Apakah Anda yakin ingin menghapus penjualan ini ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -305,7 +323,14 @@
 
 @endsection
 @push('addon-script')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
+
+$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
 
     $('#delete').on('show.bs.modal', (e) => {
         var id = $(e.relatedTarget).data('id');

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Selling;
+use App\Models\Banner;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -32,7 +33,8 @@ class HomeController extends Controller
             $agent = User::where('role', 2)->count();
             $product = Product::count();
             $sell_item = Selling::sum('quantity');
-            return view('pages.admin.dashboard.index', compact('agent', 'reseller', 'product', 'sell_item'));
+            $banners = Banner::all();
+            return view('pages.admin.dashboard.index', compact('agent', 'reseller', 'product', 'sell_item', 'banners'));
         } else if(auth()->user()->role == '1') {
             // $reseller = Reseller::where('user_id', Auth::user()->id)->count();
             // $sell_item = Sale::where('user_id', Auth::user()->id)->sum('quantity');

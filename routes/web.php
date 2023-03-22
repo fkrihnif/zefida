@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\SellingController;
@@ -45,6 +46,13 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::get('', [DashboardController::class, 'index'])->name('index');
     });
 
+    Route::prefix('banner')->name('banner.')->group(function () {
+        Route::get('', [BannerController::class, 'index'])->name('index');
+        Route::post('store', [BannerController::class, 'store'])->name('store');
+        Route::put('update', [BannerController::class, 'update'])->name('update');
+        Route::delete('delete', [BannerController::class, 'delete'])->name('delete');
+    });
+
     Route::prefix('product')->name('product.')->group(function () {
         Route::get('', [ProductController::class, 'index'])->name('index');
         Route::post('store', [ProductController::class, 'store'])->name('store');
@@ -69,6 +77,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::post('storeAgent', [TimController::class, 'storeAgent'])->name('storeAgent');
         Route::get('detail/{id}', [TimController::class, 'detail'])->name('detail');
         Route::post('storeReseller', [TimController::class, 'storeReseller'])->name('storeReseller');
+        Route::put('updateAgent', [TimController::class, 'updateAgent'])->name('updateAgent');
+        Route::put('updateReseller', [TimController::class, 'updateReseller'])->name('updateReseller');
         Route::get('detail/{agent}/detailReseller/{reseller}', [TimController::class, 'detailReseller'])->name('detailReseller');
         Route::delete('delete', [TimController::class, 'delete'])->name('delete');
         Route::post('resetPassword', [TimController::class, 'resetPassword'])->name('resetPassword');
