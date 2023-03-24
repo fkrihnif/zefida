@@ -4,14 +4,18 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\MemberController;
 use App\Http\Controllers\Admin\SellingController;
 use App\Http\Controllers\Admin\TimController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Reseller\DashboardController as ResellerDashboardController;
 use App\Http\Controllers\Reseller\ResellerController as ResellerResellerController;
 use App\Http\Controllers\Reseller\ProfileController as ResellerProfileController;
+
+use App\Http\Controllers\Agent\DashboardController as AgentDashboardController;
+use App\Http\Controllers\Agent\TimController as AgentTimController;
+use App\Http\Controllers\Agent\ProfileController as AgentProfileController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -59,19 +63,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::put('update', [ProductController::class, 'update'])->name('update');
         Route::delete('delete', [ProductController::class, 'delete'])->name('delete');
     });
-    // Route::prefix('member')->name('member.')->group(function () {
-    //     Route::get('', [MemberController::class, 'index'])->name('index');
-    //     Route::post('store', [MemberController::class, 'store'])->name('store');
-    //     Route::get('detail/{id}', [MemberController::class, 'detail'])->name('detail');
-    //     Route::get('detail/{agent}/detailReseller/{reseller}', [MemberController::class, 'detailReseller'])->name('detailReseller');
-    //     Route::put('update', [MemberController::class, 'update'])->name('update');
-    //     Route::put('updateReseller', [MemberController::class, 'updateReseller'])->name('updateReseller');
-    //     Route::post('addReseller', [MemberController::class, 'addReseller'])->name('addReseller');
-    //     Route::delete('delete', [MemberController::class, 'delete'])->name('delete');
-    //     Route::post('saleStore', [MemberController::class, 'saleStore'])->name('saleStore');
-    //     Route::post('resetPassword', [MemberController::class, 'resetPassword'])->name('resetPassword');
-    // });
 
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('', [UserController::class, 'index'])->name('index');
+        Route::put('update', [UserController::class, 'update'])->name('update');
+        Route::delete('delete', [UserController::class, 'delete'])->name('delete');
+    });
     Route::prefix('tim')->name('tim.')->group(function () {
         Route::get('', [TimController::class, 'index'])->name('index');
         Route::post('storeAgent', [TimController::class, 'storeAgent'])->name('storeAgent');
@@ -95,23 +92,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
     });
 });
 
-
-//BAGIAN MEMBER
-// Route::prefix('member')->name('member.')->middleware(['auth', 'isMember'])->group(function () {
-//     Route::prefix('dashboard')->name('dashboard.')->group(function () {
-//         Route::get('', [MemberDashboardController::class, 'index'])->name('index');
-//     });
-
-//     Route::prefix('reseller')->name('reseller.')->group(function () {
-//         Route::get('', [MemberResellerController::class, 'index'])->name('index');
-//         Route::get('detail/{agent}/detailReseller/{reseller}', [MemberResellerController::class, 'detailReseller'])->name('detailReseller');
-//     });
-//     Route::prefix('profile')->name('profile.')->group(function () {
-//         Route::get('changePassword', [MemberProfileController::class, 'changePassword'])->name('changePassword');
-//         Route::put('savePassword/{id}', [MemberProfileController::class, 'savePassword'])->name('savePassword');
-//     });
-// });
-
 //bagian reseller
 Route::prefix('reseller')->name('reseller.')->middleware(['auth', 'isReseller'])->group(function () {
     Route::prefix('dashboard')->name('dashboard.')->group(function () {
@@ -120,11 +100,26 @@ Route::prefix('reseller')->name('reseller.')->middleware(['auth', 'isReseller'])
 
     Route::prefix('reseller')->name('reseller.')->group(function () {
         Route::get('', [ResellerResellerController::class, 'index'])->name('index');
-        Route::get('detail/{agent}/detailReseller/{reseller}', [ResellerResellerController::class, 'detailReseller'])->name('detailReseller');
     });
     Route::prefix('profile')->name('profile.')->group(function () {
         Route::get('changePassword', [ResellerProfileController::class, 'changePassword'])->name('changePassword');
         Route::put('savePassword/{id}', [ResellerProfileController::class, 'savePassword'])->name('savePassword');
+    });
+});
+
+//bagian agent
+Route::prefix('agent')->name('agent.')->middleware(['auth', 'isAgent'])->group(function () {
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::get('', [AgentDashboardController::class, 'index'])->name('index');
+    });
+
+    Route::prefix('tim')->name('tim.')->group(function () {
+        Route::get('', [AgentTimController::class, 'index'])->name('index');
+        Route::get('detail/{agent}/detailReseller/{reseller}', [AgentTimController::class, 'detailReseller'])->name('detailReseller');
+    });
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('changePassword', [AgentProfileController::class, 'changePassword'])->name('changePassword');
+        Route::put('savePassword/{id}', [AgentProfileController::class, 'savePassword'])->name('savePassword');
     });
 });
 

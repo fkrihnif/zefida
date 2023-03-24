@@ -6,7 +6,7 @@
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Data Agen</h1>
+        <h1 class="h3 mb-0 text-gray-800">Tim</h1>
         <a href="#" data-toggle="modal" data-target="#tambahAgent"><i class="btn btn-sm btn-primary shadow-sm">+ Tambah Agen</i></a>
         </a>
     </div>
@@ -34,8 +34,7 @@
                             <td>{{ $agent->identity_id }}</td>
                             <td>{{ $agent->name }} - {{ $agent->username }}</td>
                             <td>
-                                <a href="{{ route('admin.tim.detail', $agent->id) }}"><i class="fa fa-eye"></i></a>
-                                | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $agent->id }}"><i class="fas fa-trash"></i></a> | <a href="#" style="color: orange" data-target="#reset" data-toggle="modal" data-id="{{ $agent->id }}"><i class="fas fa-cog" style="font-size: 80%">Reset Password</i></a>
+                                <a href="{{ route('admin.tim.detail', $agent->id) }}"><i class="fa fa-eye"></i></a> | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $agent->id }}"><i class="fas fa-trash"></i></a> 
                             </td>
                         </tr>
                         @endforeach
@@ -87,7 +86,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    Apakah Anda yakin ingin menghapus Member dan Tim ini ? <b><i>semua rekapan point dan penjualan yang telah dilakukan Member dan Tim juga akan terhapus</i></b>
+                    Apakah Anda yakin ingin menghapus Member dan Tim ini ?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>

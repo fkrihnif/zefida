@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AgentReseller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Product;
@@ -35,10 +36,17 @@ class HomeController extends Controller
             $sell_item = Selling::sum('quantity');
             $banners = Banner::all();
             return view('pages.admin.dashboard.index', compact('agent', 'reseller', 'product', 'sell_item', 'banners'));
+
         } else if(auth()->user()->role == '1') {
-            // $reseller = Reseller::where('user_id', Auth::user()->id)->count();
-            // $sell_item = Sale::where('user_id', Auth::user()->id)->sum('quantity');
-            return view('pages.member.dashboard.index');
+            $sell_item = Selling::where('user_id', Auth::user()->id)->sum('package_earn');
+            $banners = Banner::all();
+            return view('pages.reseller.dashboard.index', compact('sell_item', 'banners'));
+
+        } else if(auth()->user()->role == '2') {
+            $sell_item = Selling::where('user_id', Auth::user()->id)->sum('package_earn');
+            $tim = AgentReseller::where('user_agent_id', Auth::user()->id)->count();
+            $banners = Banner::all();
+            return view('pages.agent.dashboard.index', compact('sell_item', 'tim', 'banners'));
         }
     }
 }

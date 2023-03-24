@@ -26,8 +26,13 @@
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Ganti Password
                 </a>
-                @else
-                <a class="dropdown-item" href="{{ route('member.profile.changePassword') }}">
+                @elseif (auth()->user()->role == '1')
+                <a class="dropdown-item" href="{{ route('reseller.profile.changePassword') }}">
+                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Ganti Password
+                </a>
+                @elseif (auth()->user()->role == '2')
+                <a class="dropdown-item" href="{{ route('agent.profile.changePassword') }}">
                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                     Ganti Password
                 </a>

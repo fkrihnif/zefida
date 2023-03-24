@@ -15,7 +15,7 @@ use Carbon\Carbon;
 class TimController extends Controller
 {
     public function index(){
-        $agents = User::where('role', '2')->orderBy('id', 'DESC')->get();
+        $agents = User::where('role', '2')->where('is_active', '1')->orderBy('id', 'DESC')->get();
         return view('pages.admin.tim.index', compact('agents'));
     }
 
@@ -181,6 +181,14 @@ class TimController extends Controller
         }
 
         return view('pages.admin.tim.detail-reseller', compact('reseller' ,'agent' ,'sales3', 'total_penjualan_pribadi_tahun', 'total_penjualan_tim_tahun', 'total_penjualan_reseller_bulan', 'bonus_bulan', 'nama'));
+    }
+
+    public function delete(Request $request)
+    {
+        $tim = AgentReseller::where('user_agent_id', $request->id);
+        $tim->delete();
+        toast('Tim Berhasil Dihapus','success');
+        return redirect()->back();
     }
 
     public function resetPassword(Request $request)

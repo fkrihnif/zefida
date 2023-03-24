@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@push('addon-style')
 <style>
     img {
     max-width: 100%;
@@ -110,6 +110,7 @@
     }
 }
 </style>
+@endpush
 
 @section('content')
 <!-- Begin Page Content -->

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Member;
+namespace App\Http\Controllers\Agent;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class ProfileController extends Controller
     {
         $item = User::findOrFail(auth()->user()->id);
 
-        return view('pages.member.profile.index', [
+        return view('pages.agent.profile.index', [
             'item' => $item
         ]);
     }

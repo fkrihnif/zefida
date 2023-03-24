@@ -121,12 +121,16 @@
                         $i = 1;
                         ?>
                         @foreach ($agent->agent_reseller as $r)
+                        @if ($r->user->is_active == 0)
+                            
+                        @else                        
                         <tr>
                             <td>{{ $i++ }}</td>
                             <td>{{ $r->user->identity_id }} <a href="#" data-id="{{ $r->user->id }}" data-resellerid="{{ $r->user->identity_id }}" data-name="{{ $r->user->name }}" data-isactive="{{ $r->user->is_active }}" data-toggle="modal" data-target="#editReseller"><i class="fas fa-edit" style="font-size: 70%"></i></a> </td>
                             <td>{{ $r->user->name }}</td>
                             <td>{{ $r->user->selling->sum('package_earn') }} <a href="{{ route('admin.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$r->user->id]) }}"><i class="fas fa-eye"></i></a></td>
                         </tr>
+                        @endif
                         @endforeach
                     </tbody>
                 </table>
@@ -313,54 +317,6 @@
             $('#editReseller').find('select[name="isactive"]').val(isactive);
         });
 
-
-          //utk tambah yg sudah ada
-     $(document).ready(function() {
-        var max_fields      = 50; //maximum input boxes allowed
-        var wrapper         = $(".input_fields_wrap"); //Fields wrapper
-        var add_button      = $(".add_field_button"); //Add button ID
-        var x = 1; //initlal text box count
-        $(add_button).click(function(e){ //on add input button click
-            e.preventDefault();
-            if(x < max_fields){ //max input box allowed
-                x++; //text box increment
-                $(wrapper).append(`
-                    <div class="container">
-                        <div class="row input_fields_wrap">
-                            <div class="col-5">
-                                <div class="form-group">
-                                <label for="name_reseller">Nama</label>
-                                <input type="text" class="form-control @error('name_reseller') is-invalid @enderror" id="name_reseller" name="name_reseller[]" value="{{ old('name_reseller') }}" autocomplete="off">
-                                @error('name_reseller')
-                                <div class="invalid-feedback">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label for="reseller_id">ID</label>
-                                    <input type="text" class="form-control @error('reseller_id') is-invalid @enderror" id="reseller_id" name="reseller_id[]" value="{{ old('reseller_id') }}" autocomplete="off">
-                                    @error('reseller_id')
-                                    <div class="invalid-feedback">
-                                        {{$message}}
-                                    </div>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-3">
-                                <button type="button" class="btn btn-primary remove_field" style="margin-top: 27px;">Hapus</button>
-                            </div>
-                        </div>
-                    </div>`); //add input box
-            }
-        });
-        $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
-            e.preventDefault(); 
-            $(this).parent().parent().remove(); x--;
-        })
-    });
     </script>
 
 

@@ -15,7 +15,7 @@ class SellingController extends Controller
     public function index(Request $request){
         $current_month = Carbon::now()->month;
         $products = Product::all();
-        $users = User::where('role', '!=', 0)->get();
+        $users = User::where('role', '!=', 0)->where('is_active', 1)->get();
         $fromDate = $request->get('from_date');
         $toDate = $request->get('to_date');
         if ($fromDate) {

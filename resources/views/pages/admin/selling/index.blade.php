@@ -149,9 +149,9 @@
                 </form>
 
             @if (Request::get('to_date'))
-            <p>Total Pendapatan dari Tanggal <br>{{ date('d M Y', strtotime(Request::get('from_date'))) }} sampai {{ date('d M Y', strtotime(Request::get('to_date'))) }} =<b> @currency($pendapatan)</b></p>
+            <p>Total Omset dari Tanggal <br>{{ date('d M Y', strtotime(Request::get('from_date'))) }} sampai {{ date('d M Y', strtotime(Request::get('to_date'))) }} =<b> @currency($pendapatan)</b></p>
             @else
-            <p>Total Pendapatan Bulan ini :<b> @currency($pendapatan)</b></p>
+            <p>Total Omset Bulan ini :<b> @currency($pendapatan)</b></p>
             @endif
 
             <div class="table-responsive">

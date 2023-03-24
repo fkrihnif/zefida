@@ -11,7 +11,7 @@
     <meta name="description" content="Tim Zefida">
     <link rel="icon" type="image/favicon.png" href="{{ url('template/img/favl.png') }}">
 
-    <title>Zefida</title>
+    <title>Tim Zefida | {{ Auth::user()->name }}</title>
     @include('includes.admin.style')
     @stack('addon-style')
 
@@ -24,8 +24,10 @@
 
         @if(auth()->user()->role == '0')
             @include('includes.admin.sidebar_admin')
-        @else
-            @include('includes.admin.sidebar_member')
+        @elseif (auth()->user()->role == '1')
+            @include('includes.admin.sidebar_reseller')
+        @elseif (auth()->user()->role == '2')
+            @include('includes.admin.sidebar_agent')
         @endif
 
         <!-- Content Wrapper -->
