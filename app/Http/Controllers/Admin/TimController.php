@@ -185,8 +185,9 @@ class TimController extends Controller
 
     public function delete(Request $request)
     {
-        $tim = AgentReseller::where('user_agent_id', $request->id);
-        $tim->delete();
+        $tim = AgentReseller::where('user_agent_id', $request->id)->get();
+        // dd($tim);
+        $tim->each->delete();
         toast('Tim Berhasil Dihapus','success');
         return redirect()->back();
     }

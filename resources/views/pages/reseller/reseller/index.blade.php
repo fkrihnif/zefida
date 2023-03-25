@@ -36,14 +36,14 @@
                         <div class="col-4">
                             <input type="month" id="search_month" name="search_month"
                             min="2023-01" value="{{Request::get('search_month')}}">
-                            <input type="submit" value="Cari" class="btn btn-primary text-white ml-3">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white btn-sm">
                         </div>
                 </div>
             </form>
             <form action="{{ route('reseller.reseller.index') }}">
-                <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white mb-2">
+                <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white mt-2">
             </form>
-            <div class="table-responsive">
+            <div class="table-responsive mt-2">
                 <table class="table table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>

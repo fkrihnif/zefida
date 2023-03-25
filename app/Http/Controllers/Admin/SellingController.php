@@ -25,7 +25,7 @@ class SellingController extends Controller
                    $fromDate, 
                    $toDate
                 ]
-              )->get();
+              )->orderBy('id', 'DESC')->get();
             
             $pendapatan = Selling::whereRaw(
                 "(sale_date >= ? AND sale_date <= ?)", 
@@ -35,7 +35,7 @@ class SellingController extends Controller
                 ]
               )->sum('total_price');
         } else {
-            $selling = Selling::whereMonth('sale_date', $current_month)->orderBy('sale_date', 'DESC')->get();
+            $selling = Selling::whereMonth('sale_date', $current_month)->orderBy('id', 'DESC')->get();
             $pendapatan = Selling::whereMonth('sale_date', $current_month)->sum('total_price');
         }
         return view('pages.admin.selling.index', compact('selling', 'products', 'users', 'pendapatan'));

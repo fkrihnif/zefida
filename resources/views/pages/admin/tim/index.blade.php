@@ -34,7 +34,7 @@
                             <td>{{ $agent->identity_id }}</td>
                             <td>{{ $agent->name }} - {{ $agent->username }}</td>
                             <td>
-                                <a href="{{ route('admin.tim.detail', $agent->id) }}"><i class="fa fa-eye"></i></a> | <a href="#" data-target="#delete" data-toggle="modal" data-id="{{ $agent->id }}"><i class="fas fa-trash"></i></a> 
+                                <a href="{{ route('admin.tim.detail', $agent->id) }}"><i class="fa fa-eye"></i></a>
                             </td>
                         </tr>
                         @endforeach

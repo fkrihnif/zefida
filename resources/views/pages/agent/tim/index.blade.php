@@ -73,7 +73,7 @@
                {{ $tpp->selling->sum('package_earn') }} Paket
                @endforeach  </td></tr>
            <tr><td style="padding: 3px;font-size: 90%;">Total Penjualan Tim {{ \Carbon\Carbon::now()->year }}</td><td style="padding: 3px; font-size: 90%;text-align:center">{{ $totalPurchase }} Paket</td></tr>
-           <tr><td style="padding: 3px;font-size: 90%;">Total Penjualan Tim Bulan Ini</td><td style="padding: 3px; font-size: 90%;text-align:center">{{ $totalPurchaseBulan }} Paket</td></tr>
+           <tr><td style="padding: 3px;font-size: 90%;">Total Penjualan Tim Bulan <div id="demo"></div></td><td style="padding: 3px; font-size: 90%;text-align:center">{{ $totalPurchaseBulan }} Paket</td></tr>
            <tr><td style="padding: 3px;font-size: 90%;">Bonus Bulan Ini</td><td style="padding: 3px; font-size: 90%;text-align:center"><b>@currency($totalC)</b></td></tr>
            </tbody>
        </table>
@@ -92,7 +92,7 @@
                         <div class="col-4">
                             <input type="month" id="search_month" name="search_month"
                             min="2023-01" value="{{Request::get('search_month')}}">
-                            <input type="submit" value="Cari" class="btn btn-primary text-white ml-3">
+                            <input type="submit" value="Cari" class="btn btn-primary text-white btn-sm">
                         </div>
                 </div>
             </form>
@@ -140,3 +140,12 @@
 
 
 @endsection
+@push('addon-script')
+<script>
+    const month = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+    
+    const d = new Date();
+    let name = month[d.getMonth()];
+    document.getElementById("demo").innerHTML = name;
+</script>
+@endpush
