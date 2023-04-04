@@ -28,16 +28,16 @@
             <i class="fas fa-fw fa-box"></i>
             <span>Produk</span></a>
     </li>
-    <li class="nav-item {{ request()->is('admin/user') || request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'active' : '' }}">
+    <li class="nav-item {{ request()->is('admin/user') || request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detailSelling/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'active' : '' }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
             <i class="fas fa-fw fa-user"></i>
             <span>User</span>
         </a>
-        <div id="collapseTwo" class="collapse {{ request()->is('admin/user') || request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'show' : '' }}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseTwo" class="collapse {{ request()->is('admin/user') || request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detailSelling/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'show' : '' }}" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item {{ request()->is('admin/user') ?'active' : '' }}" href="{{ route('admin.user.index') }}">All Agent/Reseller</a>
-                <a class="collapse-item {{ request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'active' : '' }}" href="{{ route('admin.tim.index') }}">Tim</a>
+                <a class="collapse-item {{ request()->is('admin/tim') || request()->is('admin/tim/detail/*') || request()->is('admin/tim/detailSelling/*') || request()->is('admin/tim/detail/*/detailReseller/*')  ?'active' : '' }}" href="{{ route('admin.tim.index') }}">Tim</a>
             </div>
         </div>
     </li>

@@ -15,7 +15,7 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-    <li class="nav-item {{ request()->is('agent/tim') || request()->is('agent/tim/detail/*/detailReseller/*') ?'active' : '' }}">
+    <li class="nav-item {{ request()->is('agent/tim') || request()->is('agent/tim/detail/*/detailReseller/*') || request()->is('agent/tim/detailSelling/*') ?'active' : '' }}">
         <a class="nav-link" href="{{ route('agent.tim.index') }}">
             <i class="fas fa-fw fa-user"></i>
             <span>Tim</span></a>

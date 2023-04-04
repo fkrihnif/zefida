@@ -19,6 +19,25 @@ class TimController extends Controller
     {
         $agent = User::find(Auth::user()->id);
 
+        $request_month = $request->get('search_month');
+
+        if ($request_month) {
+            $reseller = AgentReseller::where('user_agent_id', $agent->id)->with('selling', function ($query) use ($request_month) {
+                $get_month = substr($request_month, 5);
+                $query->whereMonth('sale_date', $get_month);
+                })->get();
+        } else {
+            $reseller = AgentReseller::where('user_agent_id', $agent->id)->with('selling', function ($query) {
+                $current_month = Carbon::now()->month;
+                $query->whereMonth('sale_date', $current_month);
+                })->get();
+        }
+
+        $total_penjualan_pribadi_bulan = User::where('id', $agent->id)->with('selling', function ($query) {
+            $current_month = Carbon::now()->month;
+            $query->whereMonth('sale_date', $current_month);
+            })->get();
+
         $total_penjualan_pribadi_tahun = User::where('id', $agent->id)->with('selling', function ($query) {
             $current_year = Carbon::now()->year;
             $query->whereYear('sale_date', $current_year);
@@ -40,7 +59,37 @@ class TimController extends Controller
             $query->whereMonth('sale_date', $current_month);
             })->get();
 
-        return view('pages.agent.tim.index', compact('agent', 'total_penjualan_pribadi_tahun', 'total_penjualan_tim_tahun', 'total_penjualan_tim_bulan', 'bonus_bulan'));
+        return view('pages.agent.tim.index', compact('agent', 'reseller', 'total_penjualan_pribadi_bulan', 'total_penjualan_pribadi_tahun', 'total_penjualan_tim_tahun', 'total_penjualan_tim_bulan', 'bonus_bulan'));
+    }
+
+    public function detailSelling(Request $request, $id){
+        $agent = User::find($id);
+        $current_month = Carbon::now()->month;
+        $request_month = $request->get('search_month');
+        if ($request_month) {
+            $selling = AgentReseller::where('user_agent_id', $agent->id)->with('selling', function ($query) use ($request_month) {
+                $get_month = substr($request_month, 5);
+                $query->whereMonth('sale_date', $get_month);
+                })->get();
+
+            $bonus = AgentReseller::where('user_agent_id', $agent->id)->with('selling', function ($query) use ($request_month) {
+                $get_month = substr($request_month, 5);
+                $query->whereMonth('sale_date', $get_month);
+                })->get();
+
+        } else {
+            $selling = AgentReseller::where('user_agent_id', $agent->id)->with('selling', function ($query) {
+                $current_month = Carbon::now()->month;
+                $query->whereMonth('sale_date', $current_month);
+                })->get();
+
+            $bonus = AgentReseller::where('user_agent_id', $agent->id)->with('selling', function ($query) {
+                $current_month = Carbon::now()->month;
+                $query->whereMonth('sale_date', $current_month);
+                })->get();
+        }
+
+        return view('pages.agent.tim.detail-selling', compact('agent','selling', 'bonus'));
     }
 
     public function detailReseller(Request $request, $agent, $reseller) 

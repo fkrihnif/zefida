@@ -22,7 +22,8 @@ class UserSeeder extends Seeder
             'username' => 'admin123',
             'password' => Hash::make('password123'),
             'role' => '0',
-            'identity_id' => 'Admin'
+            'identity_id' => 'Admin',
+            'is_active' => '1'
         ]);
         // create Reseller
         User::create([
@@ -30,7 +31,8 @@ class UserSeeder extends Seeder
             'username' => 'fikri123',
             'password' => Hash::make('password123'),
             'role' => '1',
-            'identity_id' => '00001'
+            'identity_id' => '00001',
+            'is_active' => '1'
         ]);
         // create Agent
         User::create([
@@ -38,7 +40,8 @@ class UserSeeder extends Seeder
             'username' => 'hanif123',
             'password' => Hash::make('password123'),
             'role' => '2',
-            'identity_id' => '00002'
+            'identity_id' => '00002',
+            'is_active' => '1'
         ]);
     }
 }

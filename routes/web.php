@@ -73,6 +73,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'isAdmin'])->group(f
         Route::get('', [TimController::class, 'index'])->name('index');
         Route::post('storeAgent', [TimController::class, 'storeAgent'])->name('storeAgent');
         Route::get('detail/{id}', [TimController::class, 'detail'])->name('detail');
+        Route::get('detailSelling/{id}', [TimController::class, 'detailSelling'])->name('detailSelling');
         Route::post('storeReseller', [TimController::class, 'storeReseller'])->name('storeReseller');
         Route::put('updateAgent', [TimController::class, 'updateAgent'])->name('updateAgent');
         Route::put('updateReseller', [TimController::class, 'updateReseller'])->name('updateReseller');
@@ -115,6 +116,7 @@ Route::prefix('agent')->name('agent.')->middleware(['auth', 'isAgent'])->group(f
 
     Route::prefix('tim')->name('tim.')->group(function () {
         Route::get('', [AgentTimController::class, 'index'])->name('index');
+        Route::get('detailSelling/{id}', [AgentTimController::class, 'detailSelling'])->name('detailSelling');
         Route::get('detail/{agent}/detailReseller/{reseller}', [AgentTimController::class, 'detailReseller'])->name('detailReseller');
     });
     Route::prefix('profile')->name('profile.')->group(function () {

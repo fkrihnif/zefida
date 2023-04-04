@@ -26,7 +26,22 @@
            </div>
            <div class="row">
             <div class="col-4"><b>Penjualan Bulan Ini</b></div>
-            <div class="col-8">: {{ $agent->selling->sum('package_earn') }} Paket <a href="{{ route('agent.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$agent->id]) }}"><i class="fas fa-eye"></i></a></div>
+            <div class="col-8">:
+                @php
+                $tp_pribadi_bulan = [];
+                @endphp
+                @foreach ($total_penjualan_pribadi_bulan as $tpp_bulan)
+                @php
+                $tp_pribadi_bulan[] = $tpp_bulan->selling->sum('package_earn') ;
+                @endphp
+                @endforeach
+                @php
+                $totalPurchasePribadiBulan = array_sum($tp_pribadi_bulan);
+                @endphp
+                
+                {{ $totalPurchasePribadiBulan }}
+                
+                Paket <a href="{{ route('agent.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$agent->id]) }}"><i class="fas fa-eye"></i></a></div>
            </div>
            <hr>
 
@@ -75,6 +90,9 @@
            <tr><td style="padding: 3px;font-size: 90%;">Total Penjualan Tim {{ \Carbon\Carbon::now()->year }}</td><td style="padding: 3px; font-size: 90%;text-align:center">{{ $totalPurchase }} Paket</td></tr>
            <tr><td style="padding: 3px;font-size: 90%;">Total Penjualan Tim Bulan <div id="demo"></div></td><td style="padding: 3px; font-size: 90%;text-align:center">{{ $totalPurchaseBulan }} Paket</td></tr>
            <tr><td style="padding: 3px;font-size: 90%;">Bonus Bulan Ini</td><td style="padding: 3px; font-size: 90%;text-align:center"><b>@currency($totalC)</b></td></tr>
+           <tr>
+            <td colspan="2" style="padding: 3px;font-size: 90%;text-align:right;"><a href="{{ route('agent.tim.detailSelling', $agent->id) }}" class="btn btn-sm btn-primary py-0">Lihat Detail Penjualan Tim</a></td>
+           </tr>
            </tbody>
        </table>
 
@@ -106,7 +124,13 @@
                             <th>No</th>
                             <th>ID</th>
                             <th>Nama</th>
-                            <th>Total Penjualan Bulan Ini (paket)</th>
+                            <th>Total Penjualan 
+                                @if (Request::get('search_month'))
+                                {{ date('F Y', strtotime(Request::get('search_month'))) }}
+                                @else
+                                Bulan Ini
+                                @endif
+                                (paket)</th>
 
                         </tr>
                     </thead>
@@ -115,15 +139,24 @@
                         <?php
                         $i = 1;
                         ?>
-                        @foreach ($agent->agent_reseller as $r)
+                        @foreach ($reseller as $r)
                         @if ($r->user->is_active == 0)
                             
                         @else                        
                         <tr>
                             <td>{{ $i++ }}</td>
-                            <td>{{ $r->user->identity_id }} </td>
+                            <td>{{ $r->user->identity_id }}</td>
                             <td>{{ $r->user->name }}</td>
-                            <td>{{ $r->user->selling->sum('package_earn') }} <a href="{{ route('agent.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$r->user->id]) }}"><i class="fas fa-eye"></i></a></</td>
+                            <td>
+                                <form action="{{ route('agent.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$r->user->id]) }}">
+                                    <input type="hidden" id="search_month" name="search_month"
+                                    value="{{Request::get('search_month')}}">
+                                    {{ $r->selling->sum('package_earn') }} 
+                                    <button type="submit" class="btn btn-sm btn-outline-primary py-0">
+                                        <i class="fas fa-eye"></i> 
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
                         @endif
                         @endforeach

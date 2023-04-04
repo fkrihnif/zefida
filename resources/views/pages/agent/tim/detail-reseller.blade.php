@@ -87,8 +87,8 @@
     <div class="card shadow">
         <div class="card-body" style="background-color: #f5f6fa">
             <h4><u>Detail Penjualan</u></h4>
-            <b>{{ $reseller->identity_id }} - {{ $reseller->name }}</b>
-            <form action="{{ route('admin.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$reseller->id]) }}">
+            <b>{{ $reseller->identity_id }} - ({{ $reseller->name }})</b>
+            <form action="{{ route('agent.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$reseller->id]) }}">
                 <div class="row mt-2">
                         <div class="col-4">
                             <input type="month" id="search_month" name="search_month"
@@ -97,7 +97,7 @@
                         </div>
                 </div>
             </form>
-            <form action="{{ route('admin.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$reseller->id]) }}">
+            <form action="{{ route('agent.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$reseller->id]) }}">
                 <input type="submit" value="Lihat Bulan Ini" class="btn btn-warning btn-sm text-white mt-2">
             </form>
             <div class="table-responsive mt-2">
@@ -107,7 +107,11 @@
                             <th>Tgl</th>
                             <th>Item</th>
                             <th>Qty</th>
+                            @if ($nama == "Agent")
+                        
+                            @else
                             <th>Bonus</th>
+                            @endif
                         </tr>
                     </thead>
     
@@ -125,7 +129,11 @@
                                      @endif
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->quantity }}</td>
+                                    @if ($nama == "Agent")
+                        
+                                    @else
                                     <td>@currency($item->bonus_earn)</td>  
+                                    @endif
                             </tr>
                             @php
                                 $i++;

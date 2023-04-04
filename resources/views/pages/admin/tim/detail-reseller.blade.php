@@ -87,7 +87,7 @@
     <div class="card shadow">
         <div class="card-body" style="background-color: #f5f6fa">
             <h4><u>Detail Penjualan</u></h4>
-            <b>{{ $reseller->identity_id }} - {{ $reseller->name }}</b>
+            <b>{{ $reseller->identity_id }} - ({{ $reseller->name }})</b>
             <form action="{{ route('admin.tim.detailReseller', ['agent'=>$agent->id,'reseller'=>$reseller->id]) }}">
                 <div class="row mt-2">
                         <div class="col-4">
@@ -107,7 +107,11 @@
                             <th>Tgl</th>
                             <th>Item</th>
                             <th>Qty</th>
+                            @if ($nama == "Agent")
+                        
+                            @else
                             <th>Bonus</th>
+                            @endif
                         </tr>
                     </thead>
     
@@ -125,7 +129,11 @@
                                      @endif
                                     <td>{{ $item->product->name }}</td>
                                     <td>{{ $item->quantity }}</td>
+                                    @if ($nama == "Agent")
+                        
+                                    @else
                                     <td>@currency($item->bonus_earn)</td>  
+                                    @endif 
                             </tr>
                             @php
                                 $i++;
